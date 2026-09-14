@@ -1,0 +1,93 @@
+# @package perception
+# Perception Modules Configuration
+
+# Use vlm grounder
+use_vlm_grounder: true
+vlm_type: qwen
+
+# ============================================================
+# Keypoint Detector
+# ============================================================
+keypoint_detector:
+  num_candidates_per_mask: 5
+  min_dist_bt_keypoints: 0.05
+  max_mask_ratio: 0.5
+  device: ${device}
+  seed: ${seed}
+  
+  # Workspace bounds for filtering
+  bounds_min: [-1.0, -0.75, -0.1]
+  bounds_max: [1.00, 0.75, 1.2]
+  
+  # Feature extractor: dinov3_vitb16, dinov3_vitl16, dinov2_vits14, etc.
+  feature_extractor: dinov3_vitb16
+
+# ============================================================
+# VLM Agent (for guidance generation)
+# ============================================================
+vlm_agent:
+  # Anthropic through its OpenAI-compatible endpoint: base_url MUST end with /v1/
+  # (the OpenAI SDK appends "chat/completions"). Set to null to use OpenAI instead.
+  base_url: http://localhost:8000/v1/
+  model: Qwen/Qwen3-VL-30B-A3B-Instruct
+  api_key: EMPTY            # Set OPENAI_API_KEY env var (or AZURE_OPENAI_API_KEY for Azure)
+  temperature: 0.6
+  max_completion_tokens: 4096   # must fit vLLM max_model_len (8192) minus prompt
+  query_template_dir: vlm_query/
+  # How many requests the server handles at once (vLLM's --max-num-seqs). Caps
+  # main.num_workers: each worker process is one client, and workers beyond this
+  # only queue up behind the server. Keep in sync with how the server is started.
+  max_num_seqs: 8
+
+# ============================================================
+# SAM3 Segmentation (optional, disabled by default)
+# ============================================================
+sam3:
+  enabled: false            # SAM3 can't detect small objects well
+
+# ============================================================
+# Gemini Grounding (preferred for visual grounding)
+# ============================================================
+gemini_grounding:
+  enabled: true
+  api_key:             # Set GOOGLE_API_KEY env var
+  model: gemini-3-flash-preview
+   
+  # Default objects to detect (overridden per task)
+  default_objects:
+    - drawer handle
+    - sliding handle
+    - slider handle
+    - black switch
+    - red cube
+    - blue cube
+    - pink cube
+
+# Use Qwen instead of gemini
+qwen_grounding:
+  enabled: true
+  api_key: "EMPTY"            # Set GOOGLE_API_KEY env var
+  model: Qwen/Qwen3-VL-30B-A3B-Instruct
+  base_url: http://localhost:8000/v1/
+   
+  # Default objects to detect (overridden per task)
+  default_objects:
+    - drawer handl    - sliding handle
+    - slider handle
+    - black switch
+    - red cube
+    - blue cube
+    - pink cube
+# ============================================================
+# Gemini Stage Recognition (for real-time stage + guidance decisions)
+# or use Qwen instead of gemini
+# ============================================================
+gemini:
+  api_key:             # Set GOOGLE_API_KEY env var
+  model: gemini-3-flash-preview  # Fast model for real-time queries
+
+qwen:
+  api_key: "EMPTY"            # Set GOOGLE_API_KEY env var
+  model: Qwen/Qwen3-VL-30B-A3B-Instruct
+  base_url: http://localhost:8000/v1/
+

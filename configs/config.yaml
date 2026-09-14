@@ -1,0 +1,100 @@
+# VLS Main Configuration
+#
+# Usage:
+#   python main.py                                                    # Default calvin
+#   python main.py backend.calvin.target_behavior=drawer_open         # CALVIN task
+#   python main.py backend=libero backend.libero.suite_name=libero_goal # LIBERO
+#   python main.py main.episode_num=50                                # Override params
+
+defaults:
+  - backend: libero_plus              # Environment (calvin/libero/realworld)
+  - perception               # Perception modules
+  - policy                   # Policy config
+  - _self_
+
+# ============================================================
+# Global Settings
+# ============================================================
+device: cuda
+seed: 0
+
+# ============================================================
+# Main Experiment Settings
+# ============================================================
+main:
+  episode_num: 50  # if using libero, need to be divisible by the number of tasks in the suite(i.e. libero_goal_task has 10 tasks, so episode_num should be divisible by 10)
+  output_dir: results
+
+  # ---- Multi-GPU evaluation (libero_plus) ----
+  # null / [] -> single process on ${device}.
+  # "all"     -> every visible CUDA device.
+  # 4         -> GPUs 0..3.  [0,2,5] -> those physical GPUs.
+  # The parent process spawns `num_workers` x `python main.py`, each running a
+  # disjoint stride of the selected tasks into outputs/.../shard_<i>/, then
+  # merges the per-shard episodes.json into a combined result.
+  gpus: null
+  # How many worker processes to spawn. null -> one per GPU. Workers may
+  # outnumber GPUs (they are dealt out round-robin, sharing device memory);
+  # the VLM server's concurrency (perception.vlm_agent.max_num_seqs) caps it,
+  # since extra clients only queue up behind the server.
+  num_workers: null
+  # Worker-side shard identity, set by the launcher. Leave at the defaults.
+  shard_index: 0
+  shard_count: 1
+
+  # ---- Re-running failed tasks ----
+  # Output dir of a previous run (outputs/<suite_name>/). check.py reports which
+  # of its tasks are missing, empty, have no .mp4 or carry an error marker, and
+  # those become the task selection. null -> run the configured selection.
+  rerun_error_dir: null
+  # Delete the broken task dirs found by the scan, so the re-run starts clean.
+  rerun_cleanup: true
+  # JSON file holding the task ids to run; set by the launcher from
+  # rerun_error_dir, but usable on its own to run an explicit list.
+  task_ids_file: null
+  cached_functions_dir: null
+  visualize_trajectory: true
+  debug_draw_trajectory: true 
+  render: false
+  
+  # Steering parameters
+  use_guidance: true
+  use_vlm_stage_recognition: true  # Use Gemini to recognize current stage
+  vlm_query_limit: 7  # Max VLM queries per episode
+  use_diversity: true
+  sample_batch_size: 1
+  guide_scale: 2.0
+  diversity_scale: 2.0
+  start_ratio: None
+  MCMC_steps: 4
+
+  sigmoid_k: 5.0
+  sigmoid_x0: 0.4
+  
+  # FKD (Feynman-Kac Diffusion)
+  use_fkd: true
+  fkd:
+    potential_type: max
+    lmbda: 2.0
+    adaptive_resampling: true
+    resample_frequency: 4
+
+# ============================================================
+# Experiment Tracking
+# ============================================================
+experiment:
+  name: ${backend.backend}
+  tags:
+    - ${backend.backend}
+
+# ============================================================
+# Hydra Settings
+# ============================================================
+hydra:
+  run:
+    dir: outputs/${experiment.name}/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: outputs/${experiment.name}/multirun/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: false

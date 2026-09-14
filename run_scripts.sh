@@ -1,0 +1,1 @@
+        python main.py main.gpus=[0,2,3] 

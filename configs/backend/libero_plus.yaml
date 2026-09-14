@@ -1,0 +1,70 @@
+# LIBERO-plus Environment Configuration
+#
+# LIBERO-plus (https://github.com/sylvestf/LIBERO-plus) keeps the original LIBERO
+# suite names but expands each of them from 10 tasks to ~2.5k perturbed task
+# variants (10030 in total). The perturbation is therefore selected by filtering
+# tasks, not by picking a different suite, and each task is rolled out once.
+#
+# Usage:
+#   python main.py backend=libero_plus
+#   python main.py backend=libero_plus backend.libero_plus.perturbation_categories=[camera]
+#   python main.py backend=libero_plus backend.libero_plus.perturbation_categories=[light,noise] \
+#                  backend.libero_plus.difficulty_levels=[1,2] backend.libero_plus.max_tasks=100
+#
+# @package backend
+
+backend: libero_plus
+
+libero_plus:
+  # Suites: libero_spatial, libero_object, libero_goal, libero_10, libero_mix
+  # (libero_mix holds the combined/compositional perturbations)
+  suite_name: libero_spatial
+
+  camera_name: agentview_image, robot0_eye_in_hand_image
+  obs_type: pixels_agent_pos
+  render_mode: rgb_array
+
+  observation_width: 256   # Resolution for policy observation (low-res for speed)
+  observation_height: 256
+
+  visualization_width: 640  # Resolution for VLM/video (high-res for quality)
+  visualization_height: 640
+
+  init_states: true
+  num_steps_wait: 10
+  vlm_camera: agentview
+
+  # ---- Perturbation selection (OOD evaluation) ----
+  # Which of the 7 perturbation dimensions to evaluate. null/"all" runs the whole
+  # suite. Aliases: camera, robot, language, light, background, noise, layout
+  # (or the full names, e.g. "Camera Viewpoints").
+  perturbation_categories: all
+  # Difficulty levels 1-5 from task_classification.json; null/"all" keeps all.
+  difficulty_levels: all
+  # Restrict the candidate pool to explicit task indices, e.g. [0, 1, 2].
+  task_ids_filte: null
+  # ~2.5k episodes, so cap it for a smoke run.
+  max_tasks: null
+  # Shuffle before applying max_tasks, so a capped run samples across the suite
+  # instead of taking its first tasks.
+  shuffle_tasks: false
+  task_seed: 0
+
+  # Contiguous task-id range to evaluate, inclusive on both ends (null = no
+  # range filter). Equivalent to task_ids_filter=[start_id..end_id].
+  start_id: null
+  end_id: null
+
+  # Set by the multi-GPU launcher in main.py (main.gpus / main.num_workers); do
+  # not set by hand. Each worker keeps tasks[shard_index::shard_count] of the
+  # selection above, so the workers cover disjoint task ids.
+  shard_index: 0
+  shard_count: 1
+
+  # LIBERO-plus is scored with one trial per task; raise this only to average
+  # several rollouts per variant. The episode count follows from
+  # (selected tasks x episodes_per_task) and overrides main.episode_num.
+  episodes_per_task: 1
+  # How many MuJoCo envs to keep alive at once. Tasks are visited in order, so 1
+  # is enough; raise it only if you revisit tasks and have the memory for it.
+  env_cache_size: 1
