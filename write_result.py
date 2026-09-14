@@ -1,12 +1,15 @@
 """Summarise an evaluation run into ``result/<suite_name>.csv``.
 
 One row per task that produced a rollout video (``Task_<id>/*.mp4``), with its
-status and LIBERO-plus perturbation category. main.py reads the same CSV back
-(see main.pending_task_ids) to run only the tasks that are not listed yet.
+status and LIBERO-plus perturbation category. main.py runs only the tasks that
+are not listed yet (`pending_task_ids`) and appends a row as each task finishes
+(`append_result`), so the CLI below is only needed to rebuild the CSV from an
+output directory.
 """
 
 import argparse
 import csv
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -69,6 +72,27 @@ def pending_task_ids(
     candidates = range(suite_task_count(suite_name)) if task_ids is None else task_ids
     done = completed_task_ids(csv_path)
     return sorted({int(task_id) for task_id in candidates} - done)
+
+
+def append_result(csv_path: str, task_id: int, status: str, category: Optional[str]) -> None:
+    """Append one task's row, writing the header first if the file is new or empty.
+
+    Several multi-GPU workers append to the same file, so the whole
+    check-header-then-write is done under an exclusive lock.
+    """
+    os.makedirs(os.path.dirname(csv_path) or ".", exist_ok=True)
+    with open(csv_path, "a", newline="") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        try:
+            f.seek(0, os.SEEK_END)
+            writer = csv.writer(f)
+            if f.tell() == 0:
+                writer.writerow(CSV_COLUMNS)
+            writer.writerow([int(task_id), status, category])
+            f.flush()
+            os.fsync(f.fileno())
+        finally:
+            fcntl.flock(f, fcntl.LOCK_UN)
 
 
 if __name__ == "__main__":

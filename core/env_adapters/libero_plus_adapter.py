@@ -42,6 +42,11 @@ from lerobot.utils.constants import OBS_ENV_STATE, OBS_IMAGE, OBS_IMAGES, OBS_ST
 # Import LIBERO-PLUS benchmark
 # __file__ is in core/env_adapters/, so need .parent.parent.parent to get project root
 LIBERO_PLUS_PATH = Path(__file__).parent.parent.parent / "third_party" / "libero_plus"
+if not (LIBERO_PLUS_PATH / "libero" / "libero").is_dir():
+    raise ImportError(
+        f"LIBERO-plus checkout not found at {LIBERO_PLUS_PATH}. "
+        "Run `bash scripts/setup_libero_plus.sh` from the repository root."
+    )
 if str(LIBERO_PLUS_PATH) not in sys.path:
     sys.path.insert(0, str(LIBERO_PLUS_PATH))
 
@@ -66,6 +71,10 @@ if not _LIBERO_CONFIG_FILE.exists():
             },
             _f,
         )
+
+# LIBERO-plus's env wrapper imports wand, which needs libMagickWand at import time.
+from patches import imagemagick
+imagemagick.apply()
 
 from libero.libero import benchmark, get_libero_path
 from libero.libero.envs import OffScreenRenderEnv
@@ -286,125 +295,6 @@ def select_perturbation_tasks(
         f"{dict(Counter(m['category'] for m in meta))}"
     )
     return selected, meta
-    
-    base_suite, flags = _parse_perturbation_type(suite_name)
-    log.info(f"Parsed: base_suite='{base_suite}', flags={flags}")
-    
-    # If no perturbations needed, return original
-    if not any(flags.values()):
-        log.info(f"No perturbations needed for '{suite_name}'")
-        return suite_name, False
-    
-    # Load evaluation config
-    evaluation_config_path = str(LIBERO_PRO_PATH / "evaluation_config.yaml")
-    if not Path(evaluation_config_path).exists():
-        log.warning(f"Warning: evaluation_config.yaml not found at {evaluation_config_path}")
-        return suite_name
-    
-    with open(evaluation_config_path, "r") as f:
-        configs = yaml.safe_load(f)
-    
-    # Update configs with perturbation flags
-    configs.update(flags)
-    
-    # Set paths relative to base suite
-    bddl_base = Path(get_libero_path("bddl_files"))
-    configs["bddl_files_path"] = str(bddl_base / base_suite)
-    configs["task_suite_name"] = base_suite
-    configs["init_file_dir"] = get_libero_path("init_states")
-    
-    # Resolve ood config paths relative to LIBERO-PRO directory
-    if "ood_task_configs" in configs:
-        for key, rel_path in configs["ood_task_configs"].items():
-            configs["ood_task_configs"][key] = str(LIBERO_PRO_PATH / rel_path.lstrip("./"))
-    
-    # Handle temp (combined) perturbations
-    if flags.get("is_temp"):
-        # For temp suites, read actual flags from config
-        for flag_key in ["use_environment", "use_swap", "use_object", "use_language", "use_task"]:
-            if flag_key in configs:
-                flags[flag_key] = configs[flag_key]
-        
-        # Check if environment needs to be created
-        temp_bddl_path = bddl_base / f"{base_suite}_temp"
-        temp_init_path = Path(get_libero_path("init_states")) / f"{base_suite}_temp"
-        
-        # Create log file content for verification
-        log_content = ",".join([
-            str(flags.get("use_swap", False)),
-            str(flags.get("use_object", False)),
-            str(flags.get("use_language", False)),
-            str(flags.get("use_task", False)),
-            str(flags.get("use_environment", False)),
-        ])
-        
-        needs_regenerate = False
-        if not temp_bddl_path.exists() or not temp_init_path.exists():
-            needs_regenerate = True
-        else:
-            log_file = temp_bddl_path / "log.txt"
-            if log_file.exists():
-                with open(log_file, "r") as f:
-                    existing_log = f.read().strip()
-                if existing_log != log_content:
-                    needs_regenerate = True
-            else:
-                needs_regenerate = True
-        
-        if needs_regenerate:
-            log.info(f"Generating temp environment for {suite_name} with flags: {flags}")
-            temp_bddl_path.mkdir(parents=True, exist_ok=True)
-            temp_init_path.mkdir(parents=True, exist_ok=True)
-            with open(temp_bddl_path / "log.txt", "w") as f:
-                f.write(log_content)
-            perturbation_module.create_env(configs=configs)
-        
-        # Check if any language-changing perturbations are enabled
-        should_read_language = flags.get("use_task", False) or flags.get("use_language", False)
-        return f"{base_suite}_temp", should_read_language
-    
-    # Handle single perturbation type
-    else:
-        # Determine perturbation suffix
-        perturbation_key = None
-        for key in ["use_swap", "use_object", "use_language", "use_task", "use_environment"]:
-            if flags.get(key):
-                perturbation_key = key
-                break
-        
-        if perturbation_key:
-            # Get the suffix from perturbation_mapping in config
-            perturbation_mapping = configs.get("perturbation_mapping", {
-                "use_environment": "env",
-                "use_swap": "swap",
-                "use_object": "object",
-                "use_language": "lan",
-                "use_task": "task",
-            })
-            suffix = perturbation_mapping.get(perturbation_key, "")
-            
-            # Check if perturbed environment exists
-            perturbed_suite_name = f"{base_suite}_{suffix}"
-            perturbed_bddl_path = bddl_base / perturbed_suite_name
-            perturbed_init_path = Path(get_libero_path("init_states")) / perturbed_suite_name
-            
-            log.info(f"Target perturbed suite: {perturbed_suite_name}")
-            log.info(f"   BDDL path: {perturbed_bddl_path} (exists: {perturbed_bddl_path.exists()})")
-            log.info(f"   Init path: {perturbed_init_path} (exists: {perturbed_init_path.exists()})")
-            
-            if not perturbed_init_path.exists():
-                log.info(f"Generating perturbed environment: {perturbed_suite_name}")
-                perturbation_module.create_env(configs=configs)
-            else:
-                log.info(f"Perturbed environment already exists: {perturbed_suite_name}")
-            
-            # Determine if this perturbation type changes language
-            should_read_language = perturbation_key in ["use_task", "use_language"]
-            log.info(f"Should read language from BDDL: {should_read_language}")
-            return perturbed_suite_name, should_read_language
-    
-    return suite_name, False
-
 
 def _parse_camera_names(camera_name: str | Sequence[str]) -> list[str]:
     """Normalize camera_name into a non-empty list of strings."""
@@ -436,7 +326,17 @@ def get_task_init_states(task_suite: Any, i: int) -> np.ndarray:
     # suite knows how to strip the perturbation suffix (_view_/_table_/_light_/
     # ...) to find it. Always go through the suite instead of joining the path
     # by hand.
-    return task_suite.get_task_init_states(i)
+    #
+    # The init files are pickled numpy arrays, which torch>=2.6 refuses under its
+    # default torch.load(weights_only=True), and LIBERO-plus calls torch.load
+    # without the flag. Allow full unpickling for this call only; the files come
+    # from the pinned LIBERO-plus checkout.
+    original_load = torch.load
+    torch.load = partial(original_load, weights_only=False)
+    try:
+        return task_suite.get_task_init_states(i)
+    finally:
+        torch.load = original_load
 
 
 def get_libero_dummy_action():

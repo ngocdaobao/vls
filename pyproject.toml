@@ -111,22 +111,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# LIBERO-PRO is not listed here: it has no PyPI release and its git remote is
-# SSH-only, so it stays a manual editable install. From the REPO ROOT:
-#
-#     uv sync --extra libero
-#     uv pip install --no-deps -e third_party/libero_pro -C editable_mode=compat
-#
-# `-C editable_mode=compat` is required for libero_pro: its `libero/` directory
-# has no __init__.py, so setuptools' find_packages() yields an empty package
-# list and a modern PEP 660 editable install produces an unimportable package.
-# The compat mode puts the source root on sys.path the way `setup.py develop`
-# used to, and `libero` then resolves as a namespace package.
-#
-# Re-run it after any later `uv sync`, which prunes packages it does not
-# manage (or pass `uv sync --inexact` to leave it alone).
+# The LIBERO benchmark code itself (third_party/libero_plus, or libero_pro for
+# the `libero` backend) is not installed into the venv. The adapters prepend the
+# checkout to sys.path and pin LIBERO_CONFIG_PATH before importing it, so
+# `uv sync` can prune freely and the two checkouts never shadow each other.
+# Fetch it with scripts/setup_libero_plus.sh.
 
-# Third-party half of the LIBERO / LIBERO-PRO backend (MuJoCo based).
+# Third-party half of the LIBERO / LIBERO-plus backends (MuJoCo based).
 libero = [
     "robosuite==1.4.0",
     # libero_pro/libero/libero/envs/venv.py imports the legacy gym directly
@@ -192,7 +183,7 @@ torchaudio = { index = "pytorch-cu118" }
 # straight from git, so third_party/lerobot does not need checking out.
 lerobot = { git = "https://github.com/Treeeplanter/lerobot.git", rev = "fbf0fb1e6a39a9223b61fcd09aead75c95363194" }
 
-# NOTE: third_party/libero_pro is deliberately NOT declared as a path source.
+# NOTE: third_party/libero_* are deliberately NOT declared as path sources.
 # `uv lock` resolves every extra regardless of what you sync, so a path source
-# pointing at a submodule that has not been checked out yet fails the whole
-# lock. See the comment above [project.optional-dependencies].
+# pointing at a checkout that does not exist yet fails the whole lock. See the
+# comment above [project.optional-dependencies].

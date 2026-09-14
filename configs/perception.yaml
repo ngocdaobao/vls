@@ -19,8 +19,11 @@ keypoint_detector:
   bounds_min: [-1.0, -0.75, -0.1]
   bounds_max: [1.00, 0.75, 1.2]
   
-  # Feature extractor: dinov3_vitb16, dinov3_vitl16, dinov2_vits14, etc.
-  feature_extractor: dinov3_vitb16
+  # Feature extractor: dinov2_vits14 (torch.hub, no login) or dinov3_* (HF).
+  # DINOv3 needs transformers>=4.56, but pi05 pins lerobot's 4.53 transformers
+  # fork, and the facebook/dinov3-* repos are gated. A dinov3_* value therefore
+  # silently falls back to dinov2_vits14 in this environment.
+  feature_extractor: dinov2_vits14
 
 # ============================================================
 # VLM Agent (for guidance generation)
@@ -32,7 +35,7 @@ vlm_agent:
   model: Qwen/Qwen3-VL-30B-A3B-Instruct
   api_key: EMPTY            # Set OPENAI_API_KEY env var (or AZURE_OPENAI_API_KEY for Azure)
   temperature: 0.6
-  max_completion_tokens: 4096   # must fit vLLM max_model_len (8192) minus prompt
+  max_completion_tokens: 4096   # must fit the server's --max-model-len minus the prompt
   query_template_dir: vlm_query/
   # How many requests the server handles at once (vLLM's --max-num-seqs). Caps
   # main.num_workers: each worker process is one client, and workers beyond this
@@ -72,7 +75,8 @@ qwen_grounding:
    
   # Default objects to detect (overridden per task)
   default_objects:
-    - drawer handl    - sliding handle
+    - drawer handle
+    - sliding handle
     - slider handle
     - black switch
     - red cube

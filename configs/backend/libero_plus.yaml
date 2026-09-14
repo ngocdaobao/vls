@@ -42,7 +42,7 @@ libero_plus:
   # Difficulty levels 1-5 from task_classification.json; null/"all" keeps all.
   difficulty_levels: all
   # Restrict the candidate pool to explicit task indices, e.g. [0, 1, 2].
-  task_ids_filte: null
+  task_ids_filter: null
   # ~2.5k episodes, so cap it for a smoke run.
   max_tasks: null
   # Shuffle before applying max_tasks, so a capped run samples across the suite

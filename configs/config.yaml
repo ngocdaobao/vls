@@ -42,6 +42,14 @@ main:
   shard_index: 0
   shard_count: 1
 
+  # ---- Result CSV (libero_plus) ----
+  # Every finished task appends "Task ID,Status,Category" to
+  # <result_dir>/<suite_name>.csv. With skip_completed, tasks already listed
+  # there are left out of the selection, so an interrupted or partial
+  # evaluation resumes where it stopped. Tasks that crash are not written.
+  result_dir: result
+  skip_completed: true
+
   # ---- Re-running failed tasks ----
   # Output dir of a previous run (outputs/<suite_name>/). check.py reports which
   # of its tasks are missing, empty, have no .mp4 or carry an error marker, and

@@ -22,338 +22,284 @@
 
 <p align="center"><sup>*</sup>Co-advised</p>
 
-## Abstract
+Pretrained diffusion and flow-matching policies often fail under train–test
+distribution shift. Rather than retraining, **VLS** adapts them at inference
+time: a vision–language model synthesizes differentiable reward functions that
+steer the policy's sampling toward the test-time spatial and task requirements.
+It combines **gradient-based refinement**, **RBF diversity** and
+**Feynman–Kac resampling**.
 
-Pretrained diffusion and flow-matching policies often fail under train-test distribution shifts. Rather than retraining, **VLS** performs **inference-time adaptation** by leveraging vision-language models to synthesize differentiable reward functions that steer the sampling process of pretrained policies toward satisfying test-time spatial and task requirements.
+This README covers the **LIBERO-plus** evaluation with a **π0.5** policy, which
+is the configuration `configs/` ships with. The CALVIN and LIBERO-PRO adapters
+are still in `core/env_adapters/` but are not set up by these instructions.
 
-VLS introduces three steering mechanisms: **gradient-based refinement**, **RBF diversity**, and **Feynman–Kac resampling** — achieving **+31%** on CALVIN and **+13%** on LIBERO-PRO, with real-world Franka robot deployment.
+---
+
+## Requirements
+
+- Linux x86_64 with an NVIDIA GPU (the lockfile pins CUDA 11.8 wheels of torch 2.7.1).
+- [`uv`](https://docs.astral.sh/uv/getting-started/installation/), `git`, `curl`.
+  uv downloads Python 3.12 itself; no conda or system Python is needed.
+- **No root is needed.** On Debian/Ubuntu the setup script fetches the one system
+  library it needs (ImageMagick) into the project directory.
+- A Hugging Face account with access to
+  [`google/paligemma-3b-pt-224`](https://huggingface.co/google/paligemma-3b-pt-224)
+  (π0.5's tokenizer, a gated repo).
+- Disk: ~9 GB for LIBERO-plus assets, ~7 GB for the policy, plus the VLM weights.
 
 ## Installation
 
-Dependencies are managed with [uv](https://docs.astral.sh/uv/). The lockfile pins
-CUDA 11.8 wheels, so the environment resolves for **Linux x86_64** only. uv
-fetches the Python 3.12 interpreter itself — no system Python or conda needed.
+Run everything from the repository root.
 
-### 1. Clone with Submodules
+### 1. Clone
 
 ```bash
-git clone --recursive https://github.com/Vision-Language-Steering/code.git
-cd code
+git clone https://github.com/Vision-Language-Steering/code.git vls
+cd vls
 ```
 
-If you already cloned without submodules:
-
-```bash
-git submodule update --init --recursive
-```
-
-### 2. Create the Environment
+### 2. Python environment
 
 ```bash
 uv sync --extra libero
 ```
 
-This creates `.venv/` and installs every pinned version from `uv.lock`, including
-`torch==2.7.1+cu118` and the [LeRobot fork](https://github.com/Treeeplanter/lerobot)
-this project targets — the fork is fetched straight from git, so no separate
-install step is required for it.
+This creates `.venv/` with the exact versions in `uv.lock`, including the
+[LeRobot fork](https://github.com/Treeeplanter/lerobot) and the MuJoCo /
+robosuite / bddl stack. Commands below use `uv run`; activating the venv
+(`source .venv/bin/activate`) works just as well.
 
-Drop `--extra libero` if you are not running the LIBERO-PRO benchmark. Other
-optional groups:
+### 3. LIBERO-plus benchmark, assets and ImageMagick
 
-| Command | Adds |
+```bash
+bash scripts/setup_libero_plus.sh
+```
+
+The script is idempotent. Each step is skipped when its result is already in place:
+
+| Step | Result |
 |---|---|
-| `uv sync --extra libero` | LIBERO-PRO backend (robosuite, MuJoCo, bddl) |
-| `uv sync --extra gemini` | Gemini grounding backend (`core/gemini_grounder.py`) |
-| `uv sync --group dev` | pytest, IPython, jupytext |
+| Clone [LIBERO-plus](https://github.com/sylvestf/LIBERO-plus) at the tested commit | `third_party/libero_plus/` |
+| Download and unpack the asset pack (6.4 GB zip) from [`Sylvest/LIBERO-plus`](https://huggingface.co/datasets/Sylvest/LIBERO-plus) | `third_party/libero_plus/libero/libero/assets/` |
+| Fetch ImageMagick if the system has none | `.deps/imagemagick/` |
+| Check that wand, robosuite, MuJoCo and bddl load in the same order `main.py` loads them | — |
 
-Then either activate the venv or prefix commands with `uv run`:
+Why some of this is not a plain `pip install`:
 
-```bash
-source .venv/bin/activate
-```
+- **LIBERO-plus is not installed into the venv.** The adapter puts
+  `third_party/libero_plus` on `sys.path` and pins `LIBERO_CONFIG_PATH` to
+  `third_party/libero_plus/.libero/`. That way `uv sync` cannot prune it, and
+  LIBERO never reads or writes `~/.libero/config.yaml`.
+- **ImageMagick comes from the distribution's own packages.** LIBERO-plus imports
+  `wand` at module level, and wand needs `libMagickWand`.
+  - A conda-forge ImageMagick does not work here. It links newer GLib, libstdc++
+    and X11 than the system copies that torch and Mesa have already loaded into
+    the process, so it fails to load.
+  - The script downloads Ubuntu's `libmagickwand-6.q16-6` with `apt-get download`
+    (no root) and unpacks it. `patches/imagemagick.py` then points wand at it.
+  - If ImageMagick is already installed system-wide, or `MAGICK_HOME` is set,
+    this step is skipped.
 
-### 3. LIBERO-PRO (editable install)
+### 4. Hugging Face login
 
-LIBERO-PRO has no PyPI release and an SSH-only git remote, so it stays a manual
-editable install. Run this **from the repository root**:
-
-```bash
-uv pip install --no-deps -e third_party/libero_plus -C editable_mode=compat
-```
-
-`-C editable_mode=compat` is required: the fork's `libero/` directory has no
-`__init__.py`, so setuptools' `find_packages()` returns an empty list and a
-standard PEP 660 editable install produces a package that cannot be imported.
-Compat mode puts the source root on `sys.path` the way `setup.py develop` used
-to, and `libero` then resolves as a namespace package.
-
-Re-run this after any later `uv sync`, which prunes packages it does not manage
-— or pass `uv sync --inexact` to leave it in place.
-
-Verify the environment:
- 
-```bash
-uv run python main.py --help
-```
-
-> **CALVIN backend:** `core/env_adapters/calvin_adapter.py` is still present but
-> its dependencies (`pybullet`, `calvin_env`, `calvin_models`) are not part of
-> this environment, and the adapter is imported lazily. To use it, check out the
-> CALVIN submodule and install those packages yourself.
-
-### 4. Download Model Checkpoints
-
-Download or train your diffusion policy checkpoint and update the path in `config.yaml`:
-
-```yaml
-policy:
-  pretrained_path: "/path/to/your/checkpoint/"
-```
-
-## Configuration
-
-Main configuration is in `config.yaml`. Key sections:
-
-### Main Settings
-
-```yaml
-main:
-  episode_num: 1                    # Number of episodes to run
-  instruction: "close the drawer"   # Task instruction
-  use_guidance: true                # Enable steering
-  guide_scale: 40.0                 # Guidance strength
-  diversity_scale: 10.0             # Diversity weight for particle sampling
-  sample_batch_size: 20             # Number of particles for FK steering
-  action_horizon: 14                # Action sequence length
-  start_step: 70                    # When to start guidance (diffusion step)
-  MCMC_steps: 4                     # MCMC steps for each denoising step
-```
-
-### Environment Backend
-
-```yaml
-backend:
-  backend: "calvin"  # Options: "calvin", "libero", "realworld"
-```
-
-**CALVIN-specific:**
-```yaml
-backend:
-  calvin:
-    id: "PlayTableSimEnv"
-    show_gui: false               # Set true for visualization
-    use_egl: true                 # EGL rendering (headless)
-    vlm_camera: "static"          # Camera for VLM queries
-    cubes_table_only: true        # Only spawn cubes on table
-```
-
-**LIBERO-specific:**
-```yaml
-backend:
-  libero:
-    suite_name: "libero_spatial"  # Options: libero_spatial, libero_object, libero_goal, libero_10
-    vlm_camera: "agentview"
-```
-
-### VLM Agent
-
-```yaml
-vlm_agent:
-  model: "gpt-4"                    # or "gpt-4o", "claude-3.5-sonnet"
-  temperature: 0.7
-  max_completion_tokens: 2000
-```
-
-### Keypoint Detection
-
-```yaml
-keypoint_detector:
-  num_candidates_per_mask: 5       # Keypoints per detected object
-  min_dist_bt_keypoints: 0.02      # Minimum distance between keypoints
-  max_mask_ratio: 0.5              # Ignore masks larger than this ratio
-  bounds_min: [-1.0, -0.75, -0.1]  # Workspace bounds
-  bounds_max: [0.10, 0.75, 1.2]
-```
-
-## Running the Pipeline
-
-### Basic Usage
+Accept the license on the
+[PaliGemma model page](https://huggingface.co/google/paligemma-3b-pt-224), then:
 
 ```bash
-uv run python main.py --config config.yaml
+uv run hf auth login
 ```
 
-### Pipeline Overview
+### 5. Policy checkpoint
 
-```
-1. Environment Setup
-   └─> Load environment adapter (CALVIN/LIBERO/RealWorld)
-   └─> Initialize observation space
+`configs/policy.yaml` points at
+[`baongocdao/pi05_libero_py`](https://huggingface.co/baongocdao/pi05_libero_py).
+This is openpi's `pi05_libero` converted to LeRobot format. It is downloaded on
+first run.
 
-2. VLM Query Stage
-   └─> Capture scene image from vlm_camera
-   └─> Send to VLM with task instruction
-   └─> Extract guidance keypoints and stage information
-
-3. Keypoint Detection & Tracking
-   └─> Get VLM image and segmentation image from adapter
-   └─> Extract keypoint candidates for each mask by clustering from DINO feature
-   └─> Initialize KeypointTracker for online tracking
-
-4. Policy Rollout Loop (each step):
-   a) Get current observation from environment
-   b) Update keypoint positions via tracker
-   c) Compute guidance (if use_guidance=true):
-      - Sample multiple action sequences (particles)
-      - Transform delta_ee to 3D trajectories
-      - Compute reward based on reward functions
-      - FK resampling: weight and resample particles
-      - Guided MCMC sampling
-   d) Select best action from guided samples
-   e) Execute action in environment
-   f) Log trajectory and visualizations
-
-5. Episode Termination
-   └─> Save trajectory video
-   └─> Save keypoint tracking video
-   └─> Generate behavior heatmap
-   └─> Log success metrics
-```
-
-### Key Components
-
-**Environment Adapter** (`core/env_adapters/`):
-- Unified interface across different backends
-- Handles observation processing, action execution, camera access
-- Each adapter implements: `reset()`, `step()`, `get_obs()`, `get_camera_image()`
-
-**Keypoint Detector** (`core/keypoint_detector.py`):
-- Grounding DINO for text-conditional object detection
-- SAM for precise segmentation
-- Extracts 3D keypoints from depth + segmentation masks
-
-**Keypoint Tracker** (`core/keypoint_tracker.py`):
-- Tracks keypoints across frames using optical flow
-- Handles occlusion and reinitialization
-
-**FK Steering** (`core/fkd_class.py`):
-- Maintains particle swarm during diffusion sampling
-- Resamples based on reward (keypoint proximity)
-- Non-gradient particle filter approach
-
-**Diffusion Policy** (`third_party/lerobot/.../modeling_diffusion_steer.py`):
-- Modified diffusion policy that supports particle-based sampling
-- Integrates FK steering into the denoising loop
-- Returns multiple samples for reward evaluation
-
-## Important Notes
-
-### API Keys for VLM
-
-Set your API key as environment variable:
+To use a local copy instead, pass `policy.pi05.pretrained_path=/path/to/dir`. To
+convert an openpi PyTorch checkpoint yourself:
 
 ```bash
-export OPENAI_API_KEY="your-key-here"
-# or
-export ANTHROPIC_API_KEY="your-key-here"
+uv run python scripts/convert_openpi_pi05_to_lerobot.py \
+    --checkpoint-dir pi05_libero_py \
+    --norm-stats pi05_libero/assets/physical-intelligence/libero/norm_stats.json
 ```
 
-### Checkpoint Compatibility
+### 6. VLM server
 
-Make sure your policy checkpoint matches the observation space and action space:
-- CALVIN: RGB (200x200) + Proprioception
-- Action: 7-DOF delta pose + gripper
+Guidance generation, grounding and stage recognition all query an
+OpenAI-compatible endpoint. By default that is
+`http://localhost:8000/v1/`, serving `Qwen/Qwen3-VL-30B-A3B-Instruct`
+(`configs/perception.yaml`).
 
-### Guidance Parameters Tuning
+vLLM is not a dependency of this project; run it from its own environment,
+ideally on its own GPU:
 
-- `guide_scale`: Higher = stronger guidance, but may reduce diversity
-- `diversity_scale`: Controls particle diversity during resampling
-- `sample_batch_size`: More particles = better coverage but slower
-- `start_step`: When to apply guidance in diffusion steps (0-100)
-- `MCMC_steps`: More steps = better refinement but slower
-
-Typical ranges:
-- `guide_scale`: 10-100
-- `diversity_scale`: 1-20
-- `sample_batch_size`: 10-50
-- `start_step`: 50-80
-
-### Output Directory Structure
-
-```
-results/
-└── TIMESTAMP/
-    ├── episode_1/
-    │   ├── vlm_agent/
-    │   │   ├── query_img.png          # Scene image sent to VLM
-    │   │   ├── prompt.txt              # Full prompt
-    │   │   ├── output_raw.txt          # VLM response
-    │   │   └── stage1_guidance.txt     # Parsed guidance
-    │   ├── trajectory_*.png            # Trajectory visualization per step
-    │   ├── episode_1_success.mp4       # Execution video
-    │   └── keypoints_tracking.mp4      # Keypoint tracking video
-    ├── episode_2/
-    │   └── ...
-    └── behavior_static.png             # Heatmap of end-effector positions
-```
-
-### Debugging
-
-Enable visualizations for debugging:
-
-```yaml
-main:
-  visualize_trajectory: true
-  debug_draw_trajectory: true
-  render: true  # Show GUI if supported
-```
-
-View logs:
 ```bash
-tail -f results/TIMESTAMP/run.log
+uv venv ~/vllm-env --python 3.12
+uv pip install --python ~/vllm-env vllm
+CUDA_VISIBLE_DEVICES=3 ~/vllm-env/bin/vllm serve Qwen/Qwen3-VL-30B-A3B-Instruct \
+    --port 8000 --max-model-len 20000 --max-num-seqs 8
 ```
+
+Keep `--max-num-seqs` equal to `perception.vlm_agent.max_num_seqs`. Check that
+the server is up:
+
+```bash
+curl -s http://localhost:8000/v1/models
+```
+
+To use a hosted model instead, change `base_url`, `model` and `api_key` under
+`vlm_agent`, `qwen_grounding` and `qwen` in `configs/perception.yaml`.
+Alternatively, set `vlm_type: gemini` and export `GOOGLE_API_KEY`.
+
+## Running
+
+Smoke test, one LIBERO-plus task:
+
+```bash
+uv run python main.py backend.libero_plus.max_tasks=1
+```
+
+Everything is a [Hydra](https://hydra.cc) override of `configs/config.yaml`.
+To list the full config, run `uv run python main.py --help`.
+
+```bash
+# One perturbation dimension, low difficulty only, in another suite
+uv run python main.py backend.libero_plus.suite_name=libero_object \
+    backend.libero_plus.perturbation_categories=[camera] \
+    backend.libero_plus.difficulty_levels=[1,2]
+
+# Explicit task ids, or an inclusive id range
+uv run python main.py backend.libero_plus.task_ids_filter=[0,5,42]
+uv run python main.py backend.libero_plus.start_id=0 backend.libero_plus.end_id=499
+
+# Multi-GPU: one worker process per GPU (or main.num_workers of them),
+# each on a disjoint stride of the selected tasks, results merged at the end
+uv run python main.py main.gpus=[0,1,2] main.num_workers=6
+
+# Re-run only the tasks a previous run failed on (see check.py)
+uv run python main.py main.gpus=[0,1,2] main.rerun_error_dir=outputs/libero_spatial
+
+# Steering off, as a baseline
+uv run python main.py main.use_guidance=false
+```
+
+Useful selection keys (`configs/backend/libero_plus.yaml`):
+
+| Key | Meaning |
+|---|---|
+| `suite_name` | `libero_spatial`, `libero_object`, `libero_goal`, `libero_10`, `libero_mix` |
+| `perturbation_categories` | `all`, or a list of `camera`, `robot`, `language`, `light`, `background`, `noise`, `layout` |
+| `difficulty_levels` | `all`, or a list of levels 1–5 |
+| `task_ids_filter`, `start_id`/`end_id` | Restrict to specific task indices |
+| `max_tasks`, `shuffle_tasks`, `task_seed` | Cap the run, optionally sampling across the suite |
+| `episodes_per_task` | Rollouts per task variant (LIBERO-plus scores 1) |
+
+With LIBERO-plus, the episode count is (selected tasks × `episodes_per_task`).
+`main.episode_num` is ignored.
+
+### Resuming from the result CSV
+
+Each suite has a result file, `result/<suite_name>.csv`, with columns
+`Task ID,Status,Category`.
+
+- **Before a run:** every task already listed in the file is removed from the
+  selection. Only the missing tasks run; if none are missing, `main.py` exits
+  without loading anything.
+- **During a run:** as each task finishes, its row is appended right away. Under
+  `main.gpus`, all workers append to the same file under a file lock.
+- **Crashed tasks:** a task that fails in preparation or execution is not written,
+  so it stays pending for the next run.
+- **Multiple trials:** with `episodes_per_task > 1`, the row is written after the
+  task's last trial, and the task counts as `success` if any trial succeeded.
+
+To re-run tasks that are already listed, delete their rows, or run with
+`main.skip_completed=false`. `main.result_dir` changes the directory. To rebuild
+a CSV from an output directory, run
+`uv run python write_result.py --suite libero_spatial`.
+
+Steering parameters live under `main` in `configs/config.yaml`:
+
+| Key | Effect |
+|---|---|
+| `use_guidance`, `guide_scale` | Enable gradient steering and set its strength |
+| `use_diversity`, `diversity_scale` | RBF repulsion between particles |
+| `use_fkd`, `fkd.*` | Feynman–Kac resampling |
+| `sample_batch_size` | Number of particles |
+| `MCMC_steps` | Refinement steps per denoising step |
+| `vlm_query_limit` | Max VLM queries per episode |
+
+## Outputs
+
+- `outputs/<suite_name>/`: per-task rollouts, meaning videos, VLM prompts and
+  responses, and `episodes.json` with success per task. Multi-GPU runs write
+  `shard_<i>/` subdirectories and a merged result.
+- `outputs/libero_plus/<timestamp>/`: Hydra's run directory, holding the resolved
+  config and `main.log`.
+- Success rates are also broken down by perturbation category and difficulty
+  level at the end of the run.
+- `check.py` finds tasks with a missing or empty `Task_<id>` directory, no
+  `.mp4`, or an error marker. `main.rerun_error_dir` uses it.
+- `write_result.py` writes `result/<suite_name>.csv`, one row per finished task
+  with its status and perturbation category.
+
+## Code map
+
+| Path | Role |
+|---|---|
+| `main.py` | Entry point: builds the env adapter, perception, policy; runs episodes; multi-GPU launcher |
+| `core/env_adapters/` | Backend adapters (`libero_plus_adapter.py` is the one configured) |
+| `core/pi05_steer.py`, `core/diffusion_policy_steer.py` | Steerable π0.5 / diffusion policies |
+| `core/fkd_class.py` | Feynman–Kac particle resampling |
+| `core/keypoint_detector.py`, `core/keypoint_tracker.py` | DINO-feature keypoint proposals and tracking |
+| `core/qwen_grounder.py`, `core/gemini_grounder.py` | VLM object grounding and stage recognition |
+| `vlm_query/` | VLM agent and prompt templates |
+| `patches/` | Environment fixes applied at import time (EGL device selection, ImageMagick) |
+| `scripts/setup_libero_plus.sh` | Non-Python setup for the LIBERO-plus backend |
 
 ## Troubleshooting
 
-**Issue: `ModuleNotFoundError: No module named 'libero'`**
-- Install it editable from the repo root, and keep the compat flag:
-  `uv pip install --no-deps -e third_party/libero_pro -C editable_mode=compat`
-- A plain `-e` install silently produces an unimportable package. See Installation step 3.
+**`ImportError: MagickWand shared library not found`** or
+**`ImageMagick (libMagickWand) not found`**. Run `bash scripts/setup_libero_plus.sh`.
+On non-Debian systems, install ImageMagick with your package manager or set
+`MAGICK_HOME`. Do not point it at a conda-forge ImageMagick (see step 3).
 
-**Issue: `ModuleNotFoundError` for a package you know is in `uv.lock`**
-- A bare `uv pip install` targets whatever `$VIRTUAL_ENV` points at, not the
-  project directory. Check with `echo $VIRTUAL_ENV`, or pass `--python .venv/bin/python`.
-- `uv sync` prunes anything not in the lockfile, including the editable `libero`.
-  Use `uv sync --inexact` to keep it.
+**`LIBERO-plus checkout not found`**. Run `bash scripts/setup_libero_plus.sh`.
 
-**Issue: `ModuleNotFoundError: No module named 'calvin_env'`**
-- The CALVIN backend is not part of this environment. See the note at the end of Installation.
+**`401` / `GatedRepoError` for `google/paligemma-3b-pt-224`**. Accept the
+license on the model page and run `uv run hf auth login` (step 4).
 
-**Issue: VLM queries failing**
-- Check API key is set: `echo $OPENAI_API_KEY`
-- Check internet connection
-- Try with a different model in config
+**`EGL is served by a software rasterizer ... rendering runs on CPU`**. The
+machine or container has no NVIDIA EGL vendor library, so MuJoCo renders with
+Mesa's llvmpipe. It works, but it is slow and does not scale with GPUs.
+In Docker, start the container with `NVIDIA_DRIVER_CAPABILITIES=all` (or at
+least `graphics`) so the driver's `libEGL_nvidia.so` is mounted. This cannot be
+fixed from inside the container.
 
-**Issue: Keypoint detection finds nothing**
-- Check VLM output in `results/.../vlm_agent/output_raw.txt`
-- Make sure object names match what's in the scene
-- Try adjusting `max_mask_ratio` in config
+**`OverflowError: Python integer 256 out of bounds for uint8`** (in robosuite's
+`read_pixels`, every task fails during preparation). This means robosuite 1.4's
+segmentation decoding ran under NumPy 2 without the fix. `main.py` applies
+`patches/robosuite_numpy2.py` at startup; if you build environments from your
+own script, call `robosuite_numpy2.apply()` first. Delete the failed
+`Task_<id>/` directories, or use `main.rerun_error_dir`, before re-running.
 
-**Issue: Policy output is random/bad**
-- Verify checkpoint path is correct
-- Check if checkpoint is compatible with environment
-- Try without guidance first (`use_guidance: false`)
+**`MUJOCO_GL=... MuJoCo would not render through EGL`**. Unset `MUJOCO_GL` or
+set it to `egl`.
 
-**Issue: Slow execution**
-- Reduce `sample_batch_size`
-- Reduce `MCMC_steps`
-- Set `visualize_trajectory: false`
-- Use smaller image sizes in env config
+**Connection errors from the VLM agent / grounder**. The server from step 6 is
+not reachable. Check it with `curl http://localhost:8000/v1/models` and make
+sure `base_url` in `configs/perception.yaml` matches.
+
+**`ModuleNotFoundError` for a package that is in `uv.lock`**. A stale
+`$VIRTUAL_ENV` from another project can redirect `uv`. Run `deactivate`, or
+`unset VIRTUAL_ENV`, then `uv sync --extra libero` again.
+
+**DINOv3 feature extractors**. `dinov3_*` values need transformers ≥ 4.56 and
+gated HF access. π0.5 pins LeRobot's 4.53 transformers fork, so those values
+fall back to `dinov2_vits14`, which is the configured default.
 
 ## Citation
-
-If you find this work useful, please cite:
 
 ```bibtex
 @article{liu2026vls,

@@ -10,6 +10,8 @@ config
 pi05_libero/
 pi05_libero_py/
 third_party/
+# rootless system deps installed by scripts/setup_libero_plus.sh
+.deps/
 
 # Distribution / packaging
 .Python

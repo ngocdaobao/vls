@@ -60,6 +60,10 @@ sys.modules['calvin_env.scene.objects.light'].LightState = PatchedLightState
 from patches import mujoco_egl
 mujoco_egl.apply()
 
+# robosuite 1.4's segmentation decoding overflows uint8 under NumPy 2.
+from patches import robosuite_numpy2
+robosuite_numpy2.apply()
+
 # Import adapters
 from core.env_adapters import create_adapter, BaseEnvAdapter
 from core.keypoint_tracker import KeypointTracker
@@ -79,6 +83,8 @@ from lerobot.policies.diffusion.modeling_diffusion import DiffusionPolicy
 from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
 from lerobot.policies.factory import make_pre_post_processors
 from lerobot.envs.factory import make_env_pre_post_processors
+
+from write_result import append_result, pending_task_ids, suite_task_count
 
 # Import logging utility
 from utils.logging_utils import SteerLogger
@@ -163,6 +169,24 @@ def resolve_worker_count(cfg: DictConfig, gpus: List[int]) -> int:
     return workers
 
 
+def configured_task_ids(cfg: DictConfig) -> Optional[List[int]]:
+    """The explicit task ids of the backend config (id filter or id range), or None for all."""
+    backend_cfg = cfg.backend.get(cfg.backend.backend, {})
+    start_id, end_id = backend_cfg.get('start_id'), backend_cfg.get('end_id')
+    if start_id is not None and end_id is not None:
+        return list(range(int(start_id), int(end_id) + 1))
+    selected = backend_cfg.get('task_ids_filter')
+    return [int(task_id) for task_id in selected] if selected is not None else None
+
+
+def result_csv_path(cfg: DictConfig) -> Optional[str]:
+    """result/<suite_name>.csv for LIBERO-plus, which the per-task results go to; None otherwise."""
+    if cfg.backend.backend != 'libero_plus':
+        return None
+    suite_name = cfg.backend.libero_plus.suite_name
+    return os.path.join(PROJECT_ROOT, cfg.main.get('result_dir', 'result'), f'{suite_name}.csv')
+
+
 def rerun_task_ids(cfg: DictConfig) -> Optional[List[int]]:
     """Task ids of a previous run that produced no valid rollout, or None.
 
@@ -180,10 +204,7 @@ def rerun_task_ids(cfg: DictConfig) -> Optional[List[int]]:
     backend_cfg = cfg.backend.get(cfg.backend.backend, {})
     # Only re-run tasks the current selection actually covers, so ids that this
     # config never rolls out are not pulled in by the scan of the whole suite.
-    selected = backend_cfg.get('task_ids_filter')
-    start_id, end_id = backend_cfg.get('start_id'), backend_cfg.get('end_id')
-    if start_id is not None and end_id is not None:
-        selected = list(range(int(start_id), int(end_id) + 1))
+    selected = configured_task_ids(cfg)
 
     task_ids = find_error_tasks(
         error_dir,
@@ -199,6 +220,33 @@ def rerun_task_ids(cfg: DictConfig) -> Optional[List[int]]:
             f"{task_ids[:10]}{'...' if len(task_ids) > 10 else ''}"
         )
     return task_ids
+
+
+def resolve_task_selection(cfg: DictConfig) -> Optional[List[int]]:
+    """The task ids to run, or None to let the adapter select from the backend config.
+
+    Starts from the re-run selection (main.rerun_error_dir) or the configured
+    ids, then, with main.skip_completed, drops every task already listed in the
+    result CSV. Called once, before any worker starts, so all shards split the
+    same list. An empty list means there is nothing left to run.
+    """
+    task_ids = rerun_task_ids(cfg)
+    if task_ids is not None and not task_ids:
+        return task_ids
+
+    csv_path = result_csv_path(cfg)
+    if csv_path is None or not cfg.main.get('skip_completed', True):
+        return task_ids
+
+    candidates = task_ids if task_ids is not None else configured_task_ids(cfg)
+    suite_name = cfg.backend.libero_plus.suite_name
+    pending = pending_task_ids(csv_path, suite_name, candidates)
+    total = len(candidates) if candidates is not None else suite_task_count(suite_name)
+    log.info(
+        f"Result CSV {csv_path}: {total - len(pending)}/{total} selected task(s) already done, "
+        f"{len(pending)} pending"
+    )
+    return pending
 
 
 def physical_gpu_ids(visible_ids: List[int]) -> List[str]:
@@ -291,14 +339,16 @@ def launch_shards(cfg: DictConfig, gpus: List[int], num_workers: int) -> int:
         if override.split('=')[0].lstrip('+~') not in managed
     ]
 
-    # Resolve the re-run selection once, in the parent: the scan also deletes the
-    # broken task dirs, and the workers must all shard the same task list.
-    task_ids = rerun_task_ids(cfg)
+    # Resolve the selection once, in the parent: the re-run scan deletes broken
+    # task dirs, the result CSV changes while workers run, and the workers must
+    # all shard the same task list.
+    task_ids = resolve_task_selection(cfg)
     if task_ids is not None:
         if not task_ids:
+            log.info("No pending tasks; nothing to run")
             return 0
         # Absolute: the workers are started with cwd=PROJECT_ROOT.
-        task_ids_file = os.path.abspath(os.path.join(parent_dir, 'rerun_task_ids.json'))
+        task_ids_file = os.path.abspath(os.path.join(parent_dir, 'task_ids.json'))
         with open(task_ids_file, 'w') as f:
             json.dump(task_ids, f)
         overrides.append(f'main.task_ids_file={task_ids_file}')
@@ -372,12 +422,15 @@ def launch_shards(cfg: DictConfig, gpus: List[int], num_workers: int) -> int:
 
 
 class Main:
-    def __init__(self, cfg: DictConfig):
+    def __init__(self, cfg: DictConfig, task_ids: Optional[List[int]] = None):
         """
         Initialize with Hydra DictConfig.
-        
+
         Args:
             cfg: Hydra configuration (OmegaConf DictConfig)
+            task_ids: Task selection resolved by resolve_task_selection(); None
+                keeps the backend config's own selection. Ignored when the
+                launcher passes main.task_ids_file.
         """
         self.cfg = cfg
         self.config = cfg.main  # Shortcut to main config section
@@ -415,23 +468,23 @@ class Main:
             env_config['shard_index'] = self.shard_index
             env_config['shard_count'] = self.shard_count
 
-        # Re-run selection. The launcher resolves the error tasks once and hands
-        # every worker the same list through main.task_ids_file; a single-process
-        # run scans main.rerun_error_dir itself.
+        # Task selection (re-run tasks, minus those already in the result CSV).
+        # The launcher resolves it once and hands every worker the same list
+        # through main.task_ids_file; a single-process run gets it from main().
         task_ids_file = self.config.get('task_ids_file')
         if task_ids_file:
             with open(task_ids_file) as f:
-                env_config['task_ids_filter'] = json.load(f)
-            log.info(f"Task selection from {task_ids_file}: "
-                     f"{len(env_config['task_ids_filter'])} task(s)")
-        else:
-            task_ids = rerun_task_ids(cfg)
-            if task_ids:
-                env_config['task_ids_filter'] = task_ids
-        # An explicit selection replaces the range filter, which would win in
-        # the adapter otherwise.
-        if env_config.get('task_ids_filter') and (task_ids_file or self.config.get('rerun_error_dir')):
+                task_ids = json.load(f)
+            log.info(f"Task selection from {task_ids_file}: {len(task_ids)} task(s)")
+        if task_ids is not None:
+            env_config['task_ids_filter'] = task_ids
+            # The list already honours the id range, which would win in the
+            # adapter otherwise.
             env_config['start_id'] = env_config['end_id'] = None
+
+        # Per-task results go to result/<suite_name>.csv as each task finishes.
+        self.result_csv = result_csv_path(cfg)
+        self._task_trial_success = {}
 
         # Create adapter
         self.adapter = create_adapter(self.backend, env_config)
@@ -865,7 +918,9 @@ class Main:
             success_before = self.success_count
             try:
                 self._run_episode(task_id, episode, episode_dir)
-                self._record_episode(episode, task_info, self.success_count > success_before)
+                success = self.success_count > success_before
+                self._record_episode(episode, task_info, success)
+                self._write_task_result(episode, task_info, success)
             except Exception as e:
                 self._record_episode(episode, task_info, False, error=str(e))
                 log.error(f"Task {task_id} execution failed: {e}")
@@ -925,6 +980,25 @@ class Main:
         if error:
             record['error'] = error
         self.episode_records.append(record)
+
+    def _write_task_result(self, episode: int, task_info: dict, success: bool):
+        """Append the task's row to the result CSV once its last trial has run.
+
+        The adapter runs a task's `episodes_per_task` trials back to back, so the
+        row is written after the last one; the task counts as a success if any
+        trial succeeded, as write_result.collect_results scores it. Crashed
+        trials never get here, so a task that errors stays pending.
+        """
+        if self.result_csv is None:
+            return
+        task_id = task_info.get('task_id')
+        self._task_trial_success[task_id] = self._task_trial_success.get(task_id, False) or success
+        episodes_per_task = getattr(self.adapter, 'episodes_per_task', 1)
+        if (episode + 1) % episodes_per_task != 0:
+            return
+        status = 'success' if self._task_trial_success.pop(task_id) else 'fail'
+        append_result(self.result_csv, task_id, status, task_info.get('perturbation_category'))
+        log.info(f"Task {task_id}: {status} -> {self.result_csv}")
 
     def _breakdown_lines(self) -> List[str]:
         lines = breakdown_lines(self.episode_records)
@@ -1239,8 +1313,15 @@ def main(cfg: DictConfig) -> None:
         log.info(f"Perturbation categories: {libero_plus_cfg.get('perturbation_categories') or 'all'}")
         log.info(f"Difficulty levels: {libero_plus_cfg.get('difficulty_levels') or 'all'}")
     
+    # Resolve the task selection before loading any model, so a finished suite
+    # exits right away. Workers get theirs from main.task_ids_file instead.
+    task_ids = None if cfg.main.get('task_ids_file') else resolve_task_selection(cfg)
+    if task_ids is not None and not task_ids:
+        log.info("No pending tasks; nothing to run")
+        return
+
     # Initialize and run
-    runner = Main(cfg)
+    runner = Main(cfg, task_ids=task_ids)
     runner.run()
 
 

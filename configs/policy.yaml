@@ -20,7 +20,7 @@ diffusion:
 # PI05 Policy (for LIBERO)
 # ============================================================
 pi05:
-  pretrained_path: pi05_libero_py
+  pretrained_path: baongocdao/pi05_libero_py
   num_inference_steps: 10
   action_chunk_horizon: 10
 
