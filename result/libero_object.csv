@@ -1,0 +1,1792 @@
+Task ID,Status,Category
+1,success,Background Textures
+4,success,Background Textures
+15,success,Background Textures
+14,success,Background Textures
+0,success,Background Textures
+9,success,Background Textures
+12,success,Background Textures
+23,success,Background Textures
+22,success,Background Textures
+8,success,Background Textures
+17,success,Background Textures
+20,success,Background Textures
+31,success,Background Textures
+30,success,Background Textures
+16,success,Background Textures
+25,success,Background Textures
+28,success,Background Textures
+39,success,Background Textures
+38,success,Background Textures
+33,success,Background Textures
+36,success,Background Textures
+24,fail,Background Textures
+47,success,Background Textures
+41,success,Background Textures
+46,success,Background Textures
+44,success,Background Textures
+32,success,Background Textures
+49,success,Background Textures
+54,success,Background Textures
+63,success,Background Textures
+52,success,Background Textures
+40,success,Background Textures
+57,success,Background Textures
+62,success,Background Textures
+71,success,Background Textures
+60,success,Background Textures
+70,success,Background Textures
+48,success,Background Textures
+79,success,Background Textures
+65,success,Background Textures
+78,success,Background Textures
+68,success,Background Textures
+56,success,Background Textures
+87,success,Background Textures
+73,success,Background Textures
+86,success,Background Textures
+76,success,Background Textures
+64,success,Background Textures
+81,success,Background Textures
+95,success,Background Textures
+72,success,Background Textures
+94,success,Background Textures
+92,success,Background Textures
+89,success,Background Textures
+103,success,Background Textures
+80,success,Background Textures
+102,success,Background Textures
+100,success,Background Textures
+97,success,Background Textures
+111,success,Background Textures
+108,success,Background Textures
+88,success,Background Textures
+105,success,Background Textures
+119,success,Background Textures
+118,success,Background Textures
+113,success,Background Textures
+126,success,Background Textures
+127,success,Background Textures
+116,success,Background Textures
+104,success,Background Textures
+121,success,Background Textures
+135,success,Background Textures
+124,success,Background Textures
+134,success,Background Textures
+112,success,Background Textures
+129,success,Background Textures
+142,success,Background Textures
+120,success,Background Textures
+140,success,Background Textures
+145,success,Background Textures
+159,success,Background Textures
+148,success,Background Textures
+128,success,Background Textures
+167,success,Background Textures
+153,success,Background Textures
+158,success,Background Textures
+175,success,Background Textures
+136,success,Background Textures
+156,success,Background Textures
+161,success,Background Textures
+166,fail,Background Textures
+183,success,Background Textures
+164,success,Background Textures
+169,success,Background Textures
+152,success,Background Textures
+174,success,Background Textures
+191,success,Background Textures
+172,success,Background Textures
+160,success,Background Textures
+177,success,Background Textures
+182,success,Background Textures
+199,success,Background Textures
+180,success,Background Textures
+185,success,Background Textures
+190,success,Background Textures
+207,success,Background Textures
+184,success,Background Textures
+188,success,Background Textures
+193,success,Background Textures
+215,success,Background Textures
+206,success,Background Textures
+196,success,Background Textures
+192,success,Background Textures
+201,success,Background Textures
+223,success,Background Textures
+214,success,Background Textures
+200,success,Background Textures
+209,success,Background Textures
+231,success,Background Textures
+220,success,Background Textures
+230,success,Background Textures
+208,success,Background Textures
+217,success,Background Textures
+239,success,Background Textures
+236,success,Background Textures
+225,success,Background Textures
+232,success,Background Textures
+238,success,Background Textures
+247,success,Background Textures
+255,success,Robot Initial States
+233,success,Background Textures
+246,success,Background Textures
+244,success,Background Textures
+240,success,Background Textures
+252,success,Robot Initial States
+241,success,Background Textures
+254,success,Robot Initial States
+248,success,Robot Initial States
+263,fail,Robot Initial States
+260,success,Robot Initial States
+256,success,Robot Initial States
+262,fail,Robot Initial States
+257,success,Robot Initial States
+264,success,Robot Initial States
+271,fail,Robot Initial States
+265,success,Robot Initial States
+284,fail,Robot Initial States
+270,fail,Robot Initial States
+272,fail,Robot Initial States
+292,success,Robot Initial States
+279,fail,Robot Initial States
+273,fail,Robot Initial States
+278,fail,Robot Initial States
+300,success,Robot Initial States
+287,success,Robot Initial States
+286,success,Robot Initial States
+288,success,Robot Initial States
+281,success,Robot Initial States
+294,success,Robot Initial States
+308,fail,Robot Initial States
+296,success,Robot Initial States
+295,fail,Robot Initial States
+289,fail,Robot Initial States
+302,success,Robot Initial States
+303,success,Robot Initial States
+316,fail,Robot Initial States
+297,success,Robot Initial States
+304,fail,Robot Initial States
+311,success,Robot Initial States
+305,success,Robot Initial States
+312,success,Robot Initial States
+324,fail,Robot Initial States
+318,fail,Robot Initial States
+319,success,Robot Initial States
+332,success,Robot Initial States
+313,fail,Robot Initial States
+327,success,Robot Initial States
+326,fail,Robot Initial States
+340,success,Robot Initial States
+336,fail,Robot Initial States
+335,success,Robot Initial States
+321,fail,Robot Initial States
+334,fail,Robot Initial States
+344,fail,Robot Initial States
+343,fail,Robot Initial States
+348,fail,Robot Initial States
+342,success,Robot Initial States
+345,success,Robot Initial States
+351,success,Robot Initial States
+352,fail,Robot Initial States
+358,fail,Robot Initial States
+356,fail,Robot Initial States
+359,fail,Robot Initial States
+360,fail,Robot Initial States
+353,fail,Robot Initial States
+364,fail,Robot Initial States
+366,fail,Robot Initial States
+375,success,Robot Initial States
+368,fail,Robot Initial States
+372,success,Robot Initial States
+374,success,Robot Initial States
+361,fail,Robot Initial States
+383,success,Robot Initial States
+376,success,Robot Initial States
+388,fail,Robot Initial States
+369,fail,Robot Initial States
+398,fail,Robot Initial States
+384,fail,Robot Initial States
+415,success,Robot Initial States
+396,fail,Robot Initial States
+377,fail,Robot Initial States
+406,fail,Robot Initial States
+385,success,Robot Initial States
+400,fail,Robot Initial States
+431,fail,Robot Initial States
+428,success,Robot Initial States
+414,fail,Robot Initial States
+393,success,Robot Initial States
+408,success,Robot Initial States
+422,success,Robot Initial States
+439,success,Robot Initial States
+436,fail,Robot Initial States
+417,success,Robot Initial States
+424,fail,Robot Initial States
+430,success,Robot Initial States
+452,success,Robot Initial States
+447,fail,Robot Initial States
+432,fail,Robot Initial States
+433,fail,Robot Initial States
+455,success,Robot Initial States
+468,success,Robot Initial States
+446,fail,Robot Initial States
+448,success,Robot Initial States
+441,fail,Robot Initial States
+476,fail,Robot Initial States
+454,fail,Robot Initial States
+463,fail,Robot Initial States
+456,success,Robot Initial States
+484,success,Robot Initial States
+449,success,Robot Initial States
+470,success,Robot Initial States
+464,success,Robot Initial States
+471,fail,Robot Initial States
+500,fail,Robot Initial States
+472,success,Robot Initial States
+494,success,Robot Initial States
+465,fail,Robot Initial States
+479,fail,Robot Initial States
+508,fail,Robot Initial States
+480,fail,Robot Initial States
+473,success,Robot Initial States
+510,success,Robot Initial States
+487,success,Robot Initial States
+516,fail,Robot Initial States
+488,success,Robot Initial States
+481,success,Robot Initial States
+518,success,Robot Initial States
+495,success,Robot Initial States
+524,success,Robot Initial States
+496,success,Robot Initial States
+489,success,Robot Initial States
+503,success,Robot Initial States
+526,success,Robot Initial States
+511,success,Robot Initial States
+497,success,Robot Initial States
+504,success,Robot Initial States
+540,fail,Robot Initial States
+542,success,Robot Initial States
+548,success,Robot Initial States
+505,success,Robot Initial States
+519,fail,Robot Initial States
+512,fail,Robot Initial States
+550,fail,Robot Initial States
+556,fail,Robot Initial States
+513,success,Robot Initial States
+535,success,Robot Initial States
+520,fail,Robot Initial States
+558,success,Robot Initial States
+564,success,Robot Initial States
+521,success,Robot Initial States
+551,success,Robot Initial States
+566,success,Robot Initial States
+528,fail,Robot Initial States
+572,fail,Robot Initial States
+537,success,Robot Initial States
+559,fail,Robot Initial States
+536,success,Robot Initial States
+580,fail,Robot Initial States
+574,fail,Robot Initial States
+545,success,Robot Initial States
+588,success,Robot Initial States
+567,fail,Robot Initial States
+582,success,Robot Initial States
+568,success,Robot Initial States
+575,success,Robot Initial States
+561,success,Robot Initial States
+596,fail,Robot Initial States
+590,fail,Robot Initial States
+576,success,Robot Initial States
+569,success,Robot Initial States
+583,fail,Robot Initial States
+604,success,Robot Initial States
+598,fail,Robot Initial States
+584,fail,Robot Initial States
+577,success,Robot Initial States
+612,success,Robot Initial States
+591,fail,Robot Initial States
+606,success,Robot Initial States
+592,fail,Robot Initial States
+614,success,Robot Initial States
+620,success,Robot Initial States
+599,success,Robot Initial States
+585,fail,Robot Initial States
+600,success,Robot Initial States
+628,fail,Robot Initial States
+593,success,Robot Initial States
+622,fail,Robot Initial States
+607,success,Robot Initial States
+608,fail,Robot Initial States
+636,fail,Robot Initial States
+601,success,Robot Initial States
+630,fail,Robot Initial States
+615,fail,Robot Initial States
+616,success,Robot Initial States
+609,success,Robot Initial States
+624,success,Robot Initial States
+644,success,Robot Initial States
+638,fail,Robot Initial States
+623,fail,Robot Initial States
+617,success,Robot Initial States
+632,fail,Robot Initial States
+660,success,Camera Viewpoints
+646,success,Camera Viewpoints
+631,success,Robot Initial States
+625,success,Robot Initial States
+654,success,Camera Viewpoints
+668,success,Camera Viewpoints
+640,success,Robot Initial States
+639,success,Robot Initial States
+662,success,Camera Viewpoints
+648,success,Camera Viewpoints
+633,fail,Robot Initial States
+647,success,Camera Viewpoints
+684,success,Camera Viewpoints
+656,success,Camera Viewpoints
+678,success,Camera Viewpoints
+655,success,Camera Viewpoints
+692,fail,Camera Viewpoints
+641,fail,Robot Initial States
+664,success,Camera Viewpoints
+686,success,Camera Viewpoints
+663,success,Camera Viewpoints
+700,success,Camera Viewpoints
+694,success,Camera Viewpoints
+672,success,Camera Viewpoints
+671,success,Camera Viewpoints
+657,success,Camera Viewpoints
+708,success,Camera Viewpoints
+679,success,Camera Viewpoints
+665,success,Camera Viewpoints
+680,success,Camera Viewpoints
+710,success,Camera Viewpoints
+716,success,Camera Viewpoints
+673,success,Camera Viewpoints
+688,success,Camera Viewpoints
+703,success,Camera Viewpoints
+724,success,Camera Viewpoints
+681,success,Camera Viewpoints
+734,success,Camera Viewpoints
+696,success,Camera Viewpoints
+711,success,Camera Viewpoints
+689,success,Camera Viewpoints
+742,success,Camera Viewpoints
+732,fail,Camera Viewpoints
+704,success,Camera Viewpoints
+719,success,Camera Viewpoints
+697,success,Camera Viewpoints
+750,success,Camera Viewpoints
+727,success,Camera Viewpoints
+740,success,Camera Viewpoints
+712,success,Camera Viewpoints
+705,success,Camera Viewpoints
+758,success,Camera Viewpoints
+748,success,Camera Viewpoints
+735,success,Camera Viewpoints
+720,success,Camera Viewpoints
+766,success,Camera Viewpoints
+721,success,Camera Viewpoints
+743,success,Camera Viewpoints
+756,success,Camera Viewpoints
+728,fail,Camera Viewpoints
+729,success,Camera Viewpoints
+751,success,Camera Viewpoints
+774,success,Camera Viewpoints
+764,success,Camera Viewpoints
+737,success,Camera Viewpoints
+736,success,Camera Viewpoints
+782,success,Camera Viewpoints
+759,fail,Camera Viewpoints
+745,success,Camera Viewpoints
+744,success,Camera Viewpoints
+780,success,Camera Viewpoints
+790,success,Camera Viewpoints
+753,success,Camera Viewpoints
+767,success,Camera Viewpoints
+788,success,Camera Viewpoints
+798,success,Camera Viewpoints
+752,fail,Camera Viewpoints
+761,fail,Camera Viewpoints
+775,success,Camera Viewpoints
+769,success,Camera Viewpoints
+760,fail,Camera Viewpoints
+814,fail,Camera Viewpoints
+804,fail,Camera Viewpoints
+783,success,Camera Viewpoints
+777,fail,Camera Viewpoints
+791,success,Camera Viewpoints
+768,fail,Camera Viewpoints
+822,success,Camera Viewpoints
+812,success,Camera Viewpoints
+785,success,Camera Viewpoints
+830,success,Camera Viewpoints
+776,success,Camera Viewpoints
+820,fail,Camera Viewpoints
+807,fail,Camera Viewpoints
+838,success,Camera Viewpoints
+793,success,Camera Viewpoints
+784,success,Camera Viewpoints
+828,success,Camera Viewpoints
+815,fail,Camera Viewpoints
+801,success,Camera Viewpoints
+792,success,Camera Viewpoints
+846,fail,Camera Viewpoints
+800,success,Camera Viewpoints
+823,fail,Camera Viewpoints
+809,fail,Camera Viewpoints
+854,success,Camera Viewpoints
+844,success,Camera Viewpoints
+808,success,Camera Viewpoints
+831,success,Camera Viewpoints
+839,success,Camera Viewpoints
+852,success,Camera Viewpoints
+825,fail,Camera Viewpoints
+862,fail,Camera Viewpoints
+824,fail,Camera Viewpoints
+847,success,Camera Viewpoints
+833,success,Camera Viewpoints
+860,fail,Camera Viewpoints
+832,success,Camera Viewpoints
+870,fail,Camera Viewpoints
+855,fail,Camera Viewpoints
+868,success,Camera Viewpoints
+849,fail,Camera Viewpoints
+878,success,Camera Viewpoints
+876,success,Camera Viewpoints
+840,fail,Camera Viewpoints
+863,fail,Camera Viewpoints
+886,success,Camera Viewpoints
+857,success,Camera Viewpoints
+884,success,Camera Viewpoints
+848,success,Camera Viewpoints
+894,success,Camera Viewpoints
+871,fail,Camera Viewpoints
+865,fail,Camera Viewpoints
+892,success,Camera Viewpoints
+856,success,Camera Viewpoints
+879,success,Camera Viewpoints
+910,fail,Camera Viewpoints
+873,fail,Camera Viewpoints
+864,success,Camera Viewpoints
+900,success,Camera Viewpoints
+887,success,Camera Viewpoints
+881,success,Camera Viewpoints
+872,success,Camera Viewpoints
+895,success,Camera Viewpoints
+918,fail,Camera Viewpoints
+908,fail,Camera Viewpoints
+889,success,Camera Viewpoints
+888,success,Camera Viewpoints
+924,success,Camera Viewpoints
+934,success,Camera Viewpoints
+919,success,Camera Viewpoints
+897,success,Camera Viewpoints
+896,success,Camera Viewpoints
+932,success,Camera Viewpoints
+927,success,Camera Viewpoints
+905,success,Camera Viewpoints
+958,fail,Camera Viewpoints
+940,success,Camera Viewpoints
+904,fail,Camera Viewpoints
+935,success,Camera Viewpoints
+913,success,Camera Viewpoints
+948,success,Camera Viewpoints
+974,success,Camera Viewpoints
+943,success,Camera Viewpoints
+920,success,Camera Viewpoints
+937,success,Camera Viewpoints
+964,success,Camera Viewpoints
+982,fail,Camera Viewpoints
+951,success,Camera Viewpoints
+928,success,Camera Viewpoints
+945,success,Camera Viewpoints
+972,success,Camera Viewpoints
+990,success,Camera Viewpoints
+959,success,Camera Viewpoints
+936,fail,Camera Viewpoints
+953,success,Camera Viewpoints
+967,success,Camera Viewpoints
+998,success,Camera Viewpoints
+980,fail,Camera Viewpoints
+944,success,Camera Viewpoints
+961,success,Camera Viewpoints
+1006,success,Camera Viewpoints
+988,success,Camera Viewpoints
+975,fail,Camera Viewpoints
+969,success,Camera Viewpoints
+952,success,Camera Viewpoints
+1014,success,Camera Viewpoints
+996,success,Camera Viewpoints
+983,fail,Camera Viewpoints
+977,fail,Camera Viewpoints
+1022,success,Camera Viewpoints
+968,success,Camera Viewpoints
+1004,success,Camera Viewpoints
+991,success,Camera Viewpoints
+985,success,Camera Viewpoints
+1030,success,Camera Viewpoints
+1012,success,Camera Viewpoints
+999,success,Camera Viewpoints
+993,success,Camera Viewpoints
+1038,success,Camera Viewpoints
+1020,success,Camera Viewpoints
+984,fail,Camera Viewpoints
+1007,success,Camera Viewpoints
+1001,success,Camera Viewpoints
+992,success,Camera Viewpoints
+1046,success,Language Instructions
+1028,success,Camera Viewpoints
+1015,success,Camera Viewpoints
+1009,success,Camera Viewpoints
+1054,success,Language Instructions
+1000,success,Camera Viewpoints
+1036,success,Camera Viewpoints
+1017,success,Camera Viewpoints
+1023,success,Camera Viewpoints
+1062,success,Language Instructions
+1008,success,Camera Viewpoints
+1044,success,Language Instructions
+1025,fail,Camera Viewpoints
+1070,success,Language Instructions
+1031,fail,Camera Viewpoints
+1052,success,Language Instructions
+1024,fail,Camera Viewpoints
+1033,success,Camera Viewpoints
+1039,success,Camera Viewpoints
+1078,fail,Language Instructions
+1032,success,Camera Viewpoints
+1041,success,Camera Viewpoints
+1060,fail,Language Instructions
+1086,success,Language Instructions
+1047,fail,Language Instructions
+1040,success,Camera Viewpoints
+1068,success,Language Instructions
+1057,success,Language Instructions
+1094,success,Language Instructions
+1055,fail,Language Instructions
+1048,success,Language Instructions
+1076,success,Language Instructions
+1102,success,Language Instructions
+1065,success,Language Instructions
+1063,success,Language Instructions
+1056,success,Language Instructions
+1084,success,Language Instructions
+1110,fail,Language Instructions
+1081,fail,Language Instructions
+1064,success,Language Instructions
+1092,success,Language Instructions
+1071,fail,Language Instructions
+1126,success,Language Instructions
+1089,success,Language Instructions
+1100,success,Language Instructions
+1072,success,Language Instructions
+1079,success,Language Instructions
+1134,success,Language Instructions
+1108,success,Language Instructions
+1080,success,Language Instructions
+1097,success,Language Instructions
+1087,success,Language Instructions
+1142,success,Language Instructions
+1116,success,Language Instructions
+1105,success,Language Instructions
+1088,success,Language Instructions
+1150,success,Language Instructions
+1124,success,Language Instructions
+1103,success,Language Instructions
+1113,success,Language Instructions
+1158,success,Language Instructions
+1132,success,Language Instructions
+1111,success,Language Instructions
+1129,success,Language Instructions
+1140,success,Language Instructions
+1096,fail,Language Instructions
+1119,success,Language Instructions
+1137,success,Language Instructions
+1148,success,Language Instructions
+1190,success,Language Instructions
+1104,success,Language Instructions
+1127,success,Language Instructions
+1156,success,Language Instructions
+1145,fail,Language Instructions
+1112,success,Language Instructions
+1135,success,Language Instructions
+1198,fail,Language Instructions
+1143,success,Language Instructions
+1120,success,Language Instructions
+1164,success,Language Instructions
+1153,success,Language Instructions
+1206,success,Language Instructions
+1128,success,Language Instructions
+1172,success,Language Instructions
+1151,success,Language Instructions
+1161,success,Language Instructions
+1214,success,Language Instructions
+1136,success,Language Instructions
+1180,success,Language Instructions
+1159,success,Language Instructions
+1169,success,Language Instructions
+1222,success,Language Instructions
+1152,success,Language Instructions
+1188,success,Language Instructions
+1167,success,Language Instructions
+1230,success,Language Instructions
+1160,success,Language Instructions
+1196,success,Language Instructions
+1177,fail,Language Instructions
+1175,success,Language Instructions
+1204,success,Language Instructions
+1238,success,Language Instructions
+1185,success,Language Instructions
+1183,success,Language Instructions
+1176,success,Language Instructions
+1254,success,Language Instructions
+1184,success,Language Instructions
+1212,success,Language Instructions
+1193,fail,Language Instructions
+1191,success,Language Instructions
+1262,success,Language Instructions
+1192,success,Language Instructions
+1220,success,Language Instructions
+1201,success,Language Instructions
+1199,success,Language Instructions
+1270,success,Language Instructions
+1200,success,Language Instructions
+1209,success,Language Instructions
+1236,success,Language Instructions
+1207,success,Language Instructions
+1208,success,Language Instructions
+1286,success,Language Instructions
+1217,fail,Language Instructions
+1244,success,Language Instructions
+1215,success,Language Instructions
+1216,success,Language Instructions
+1294,success,Language Instructions
+1225,success,Language Instructions
+1252,success,Language Instructions
+1302,success,Language Instructions
+1233,success,Language Instructions
+1268,success,Language Instructions
+1232,success,Language Instructions
+1310,success,Language Instructions
+1241,success,Language Instructions
+1276,success,Language Instructions
+1223,fail,Language Instructions
+1240,success,Language Instructions
+1318,success,Language Instructions
+1231,success,Language Instructions
+1257,success,Language Instructions
+1292,success,Language Instructions
+1326,success,Language Instructions
+1248,success,Language Instructions
+1300,success,Language Instructions
+1265,success,Language Instructions
+1239,success,Language Instructions
+1256,success,Language Instructions
+1358,success,Language Instructions
+1273,success,Language Instructions
+1308,success,Language Instructions
+1247,success,Language Instructions
+1264,success,Language Instructions
+1366,success,Language Instructions
+1324,success,Language Instructions
+1289,success,Language Instructions
+1272,success,Language Instructions
+1374,success,Language Instructions
+1271,success,Language Instructions
+1332,success,Language Instructions
+1305,success,Language Instructions
+1280,success,Language Instructions
+1279,success,Language Instructions
+1340,success,Language Instructions
+1382,fail,Language Instructions
+1313,success,Language Instructions
+1288,success,Language Instructions
+1287,success,Language Instructions
+1348,success,Language Instructions
+1321,success,Language Instructions
+1390,fail,Language Instructions
+1295,success,Language Instructions
+1296,success,Language Instructions
+1329,success,Language Instructions
+1356,fail,Language Instructions
+1303,success,Language Instructions
+1414,success,Sensor Noise
+1304,success,Language Instructions
+1337,success,Language Instructions
+1364,success,Language Instructions
+1311,success,Language Instructions
+1422,success,Sensor Noise
+1312,success,Language Instructions
+1345,success,Language Instructions
+1319,success,Language Instructions
+1372,fail,Language Instructions
+1353,success,Language Instructions
+1320,success,Language Instructions
+1327,success,Language Instructions
+1430,success,Sensor Noise
+1388,success,Language Instructions
+1361,success,Language Instructions
+1328,success,Language Instructions
+1335,success,Language Instructions
+1446,success,Sensor Noise
+1396,success,Sensor Noise
+1369,success,Language Instructions
+1343,success,Language Instructions
+1344,success,Language Instructions
+1404,success,Sensor Noise
+1454,success,Sensor Noise
+1377,fail,Language Instructions
+1351,success,Language Instructions
+1352,success,Language Instructions
+1412,fail,Sensor Noise
+1462,success,Sensor Noise
+1360,success,Language Instructions
+1385,success,Language Instructions
+1359,fail,Language Instructions
+1470,success,Sensor Noise
+1420,success,Sensor Noise
+1368,success,Language Instructions
+1367,success,Language Instructions
+1393,fail,Language Instructions
+1478,success,Sensor Noise
+1401,success,Sensor Noise
+1376,fail,Language Instructions
+1428,success,Sensor Noise
+1375,fail,Language Instructions
+1486,success,Sensor Noise
+1383,success,Language Instructions
+1384,success,Language Instructions
+1409,fail,Sensor Noise
+1436,success,Sensor Noise
+1494,success,Sensor Noise
+1391,success,Language Instructions
+1444,success,Sensor Noise
+1392,success,Language Instructions
+1417,success,Sensor Noise
+1502,fail,Sensor Noise
+1399,success,Sensor Noise
+1452,success,Sensor Noise
+1400,success,Sensor Noise
+1407,success,Sensor Noise
+1510,success,Sensor Noise
+1425,fail,Sensor Noise
+1408,success,Sensor Noise
+1460,success,Sensor Noise
+1415,success,Sensor Noise
+1416,success,Sensor Noise
+1468,success,Sensor Noise
+1518,success,Sensor Noise
+1433,success,Sensor Noise
+1423,success,Sensor Noise
+1424,success,Sensor Noise
+1526,success,Sensor Noise
+1441,success,Sensor Noise
+1476,success,Sensor Noise
+1534,success,Sensor Noise
+1449,success,Sensor Noise
+1431,success,Sensor Noise
+1432,success,Sensor Noise
+1492,success,Sensor Noise
+1457,success,Sensor Noise
+1543,success,Sensor Noise
+1564,success,Sensor Noise
+1870,success,Objects Layout
+1561,success,Sensor Noise
+1520,success,Sensor Noise
+1551,success,Sensor Noise
+1878,success,Objects Layout
+1572,success,Sensor Noise
+1569,success,Sensor Noise
+1528,success,Sensor Noise
+1886,success,Objects Layout
+1577,success,Sensor Noise
+1894,success,Objects Layout
+1559,success,Sensor Noise
+1536,fail,Sensor Noise
+1580,success,Sensor Noise
+1585,success,Sensor Noise
+1902,success,Objects Layout
+1567,success,Sensor Noise
+1544,success,Sensor Noise
+1588,success,Sensor Noise
+1593,success,Sensor Noise
+1910,success,Objects Layout
+1575,success,Sensor Noise
+1552,success,Sensor Noise
+1583,success,Sensor Noise
+1601,success,Sensor Noise
+1604,success,Sensor Noise
+1926,success,Objects Layout
+1560,success,Sensor Noise
+1612,success,Sensor Noise
+1591,success,Sensor Noise
+1609,success,Sensor Noise
+1568,success,Sensor Noise
+1617,success,Sensor Noise
+1950,success,Objects Layout
+1620,success,Sensor Noise
+1584,success,Sensor Noise
+1599,success,Sensor Noise
+1625,fail,Sensor Noise
+1592,success,Sensor Noise
+1958,success,Objects Layout
+1628,fail,Sensor Noise
+1607,success,Sensor Noise
+1966,success,Objects Layout
+1633,fail,Sensor Noise
+1615,success,Sensor Noise
+1636,success,Sensor Noise
+1608,fail,Sensor Noise
+1974,fail,Objects Layout
+1623,fail,Sensor Noise
+1641,fail,Sensor Noise
+1644,success,Sensor Noise
+1982,success,Objects Layout
+1631,success,Sensor Noise
+1616,fail,Sensor Noise
+1660,success,Sensor Noise
+1649,success,Sensor Noise
+1639,success,Sensor Noise
+2006,fail,Objects Layout
+1624,fail,Sensor Noise
+1668,success,Sensor Noise
+1665,success,Sensor Noise
+2014,success,Objects Layout
+1647,success,Sensor Noise
+1673,success,Sensor Noise
+2022,success,Objects Layout
+1676,success,Sensor Noise
+1655,success,Sensor Noise
+1632,fail,Sensor Noise
+1681,success,Sensor Noise
+1663,success,Sensor Noise
+1684,success,Sensor Noise
+1640,success,Sensor Noise
+1671,success,Sensor Noise
+1689,success,Sensor Noise
+1692,success,Sensor Noise
+2054,success,Objects Layout
+1648,success,Sensor Noise
+1679,success,Sensor Noise
+1697,success,Sensor Noise
+1700,success,Sensor Noise
+2062,success,Objects Layout
+1656,success,Sensor Noise
+1705,success,Sensor Noise
+1708,success,Sensor Noise
+1664,success,Sensor Noise
+2070,success,Objects Layout
+1695,fail,Sensor Noise
+1721,success,Sensor Noise
+1724,success,Sensor Noise
+1672,success,Sensor Noise
+1703,success,Sensor Noise
+2078,fail,Objects Layout
+1680,success,Sensor Noise
+1745,success,Sensor Noise
+1732,success,Sensor Noise
+2086,success,Objects Layout
+1711,fail,Sensor Noise
+1753,success,Sensor Noise
+1740,success,Sensor Noise
+1696,success,Sensor Noise
+2102,success,Objects Layout
+1761,success,Sensor Noise
+1719,success,Sensor Noise
+1748,fail,Sensor Noise
+1704,fail,Sensor Noise
+2110,success,Objects Layout
+1756,success,Sensor Noise
+1727,success,Sensor Noise
+1769,success,Sensor Noise
+2118,success,Objects Layout
+1712,fail,Sensor Noise
+1777,success,Sensor Noise
+1735,success,Sensor Noise
+2126,success,Objects Layout
+1720,success,Sensor Noise
+1772,success,Sensor Noise
+1785,success,Sensor Noise
+2134,success,Objects Layout
+1780,success,Sensor Noise
+1751,fail,Sensor Noise
+1728,success,Sensor Noise
+1801,success,Sensor Noise
+1788,success,Sensor Noise
+1759,success,Sensor Noise
+2150,success,Objects Layout
+1736,success,Sensor Noise
+1796,success,Sensor Noise
+2158,success,Objects Layout
+1744,success,Sensor Noise
+1809,success,Sensor Noise
+1767,success,Sensor Noise
+1812,success,Sensor Noise
+2174,success,Objects Layout
+1817,success,Sensor Noise
+1752,fail,Sensor Noise
+1775,success,Sensor Noise
+2182,success,Objects Layout
+1825,success,Objects Layout
+1760,success,Sensor Noise
+1828,success,Objects Layout
+1783,success,Sensor Noise
+2198,success,Objects Layout
+1836,success,Objects Layout
+1833,success,Objects Layout
+1791,success,Sensor Noise
+1768,success,Sensor Noise
+2206,success,Objects Layout
+1844,success,Objects Layout
+1841,success,Objects Layout
+1807,success,Sensor Noise
+1852,success,Objects Layout
+2214,fail,Objects Layout
+1849,success,Objects Layout
+1776,fail,Sensor Noise
+1831,success,Objects Layout
+2222,success,Light Conditions
+1876,success,Objects Layout
+1784,success,Sensor Noise
+1857,fail,Objects Layout
+1839,success,Objects Layout
+1884,success,Objects Layout
+1800,success,Sensor Noise
+2238,success,Light Conditions
+1847,success,Objects Layout
+1865,success,Objects Layout
+1900,success,Objects Layout
+1808,fail,Sensor Noise
+2246,success,Light Conditions
+1855,success,Objects Layout
+1873,success,Objects Layout
+1908,success,Objects Layout
+1816,success,Sensor Noise
+1881,success,Objects Layout
+2254,success,Light Conditions
+1863,success,Objects Layout
+1824,success,Objects Layout
+1889,success,Objects Layout
+1916,success,Objects Layout
+2262,success,Light Conditions
+1871,success,Objects Layout
+1897,success,Objects Layout
+1924,success,Objects Layout
+1832,fail,Objects Layout
+2270,success,Light Conditions
+1905,success,Objects Layout
+1932,success,Objects Layout
+1887,success,Objects Layout
+1840,success,Objects Layout
+2278,success,Light Conditions
+1940,success,Objects Layout
+1895,fail,Objects Layout
+2286,success,Light Conditions
+1921,success,Objects Layout
+1848,success,Objects Layout
+1948,success,Objects Layout
+1856,success,Objects Layout
+2294,success,Light Conditions
+1929,success,Objects Layout
+1911,success,Objects Layout
+1864,success,Objects Layout
+1956,success,Objects Layout
+2302,success,Light Conditions
+1937,success,Objects Layout
+1927,success,Objects Layout
+1964,success,Objects Layout
+1935,success,Objects Layout
+1880,success,Objects Layout
+2310,success,Light Conditions
+1945,success,Objects Layout
+1943,success,Objects Layout
+1888,success,Objects Layout
+2326,success,Light Conditions
+1953,success,Objects Layout
+1980,fail,Objects Layout
+1951,success,Objects Layout
+2334,success,Light Conditions
+1904,success,Objects Layout
+1961,success,Objects Layout
+1988,success,Objects Layout
+1912,success,Objects Layout
+1969,success,Objects Layout
+1996,success,Objects Layout
+1959,success,Objects Layout
+2342,success,Light Conditions
+1977,success,Objects Layout
+1920,success,Objects Layout
+1967,success,Objects Layout
+2004,success,Objects Layout
+2350,success,Light Conditions
+1985,success,Objects Layout
+1928,success,Objects Layout
+1975,fail,Objects Layout
+2012,success,Objects Layout
+1993,success,Objects Layout
+2358,success,Light Conditions
+1936,success,Objects Layout
+2020,success,Objects Layout
+1983,success,Objects Layout
+2001,success,Objects Layout
+2366,success,Light Conditions
+1944,fail,Objects Layout
+1991,success,Objects Layout
+2009,fail,Objects Layout
+2036,fail,Objects Layout
+1999,success,Objects Layout
+2374,success,Light Conditions
+1952,success,Objects Layout
+2017,success,Objects Layout
+2044,success,Objects Layout
+2007,success,Objects Layout
+1960,success,Objects Layout
+2382,success,Light Conditions
+2052,success,Objects Layout
+2033,fail,Objects Layout
+1968,success,Objects Layout
+2398,success,Light Conditions
+2023,success,Objects Layout
+2060,success,Objects Layout
+2041,success,Objects Layout
+1976,success,Objects Layout
+2406,success,Light Conditions
+2039,success,Objects Layout
+2068,success,Objects Layout
+1984,success,Objects Layout
+2049,success,Objects Layout
+2414,success,Light Conditions
+2076,success,Objects Layout
+2047,success,Objects Layout
+2000,success,Objects Layout
+2057,success,Objects Layout
+2422,success,Light Conditions
+2092,success,Objects Layout
+2055,success,Objects Layout
+2065,success,Objects Layout
+2430,success,Light Conditions
+2008,fail,Objects Layout
+2063,success,Objects Layout
+2073,success,Objects Layout
+2438,success,Light Conditions
+2108,success,Objects Layout
+2024,success,Objects Layout
+2071,success,Objects Layout
+2446,success,Light Conditions
+2116,success,Objects Layout
+2081,success,Objects Layout
+2124,success,Objects Layout
+2032,success,Objects Layout
+2089,success,Objects Layout
+2454,success,Light Conditions
+2079,fail,Objects Layout
+2140,success,Objects Layout
+2048,success,Objects Layout
+2097,success,Objects Layout
+2462,success,Light Conditions
+2087,success,Objects Layout
+2148,success,Objects Layout
+2470,success,Light Conditions
+2064,success,Objects Layout
+2095,success,Objects Layout
+2156,success,Objects Layout
+2113,success,Objects Layout
+2478,success,Light Conditions
+2103,success,Objects Layout
+2164,success,Objects Layout
+2080,fail,Objects Layout
+2121,fail,Objects Layout
+2111,success,Objects Layout
+2088,success,Objects Layout
+2494,success,Light Conditions
+2172,fail,Objects Layout
+2119,success,Objects Layout
+2137,success,Objects Layout
+2096,success,Objects Layout
+2502,success,Light Conditions
+2127,success,Objects Layout
+2180,success,Objects Layout
+2153,success,Objects Layout
+2104,success,Objects Layout
+2135,success,Objects Layout
+2510,success,Light Conditions
+2112,success,Objects Layout
+2169,success,Objects Layout
+2188,success,Objects Layout
+2143,success,Objects Layout
+2120,success,Objects Layout
+2151,success,Objects Layout
+2196,success,Objects Layout
+2185,success,Objects Layout
+2128,fail,Objects Layout
+2204,success,Objects Layout
+2193,success,Objects Layout
+2159,fail,Objects Layout
+2136,success,Objects Layout
+2201,success,Objects Layout
+2212,fail,Objects Layout
+2167,fail,Objects Layout
+2144,success,Objects Layout
+2209,fail,Objects Layout
+2220,success,Objects Layout
+2175,success,Objects Layout
+2152,success,Objects Layout
+2228,success,Light Conditions
+2217,success,Objects Layout
+2160,fail,Objects Layout
+2191,fail,Objects Layout
+2236,success,Light Conditions
+2225,fail,Light Conditions
+2168,fail,Objects Layout
+2199,success,Objects Layout
+2233,success,Light Conditions
+2252,success,Light Conditions
+2176,success,Objects Layout
+2241,success,Light Conditions
+2260,success,Light Conditions
+2184,fail,Objects Layout
+2207,fail,Objects Layout
+2249,success,Light Conditions
+2268,success,Light Conditions
+2192,success,Objects Layout
+2276,success,Light Conditions
+2215,success,Objects Layout
+2257,success,Light Conditions
+2284,success,Light Conditions
+2200,success,Objects Layout
+2223,success,Light Conditions
+2292,success,Light Conditions
+2265,success,Light Conditions
+2208,fail,Objects Layout
+2231,success,Light Conditions
+2300,success,Light Conditions
+2216,success,Objects Layout
+2273,success,Light Conditions
+2308,success,Light Conditions
+2239,success,Light Conditions
+2281,success,Light Conditions
+2316,success,Light Conditions
+2224,success,Light Conditions
+2255,success,Light Conditions
+2289,success,Light Conditions
+2324,success,Light Conditions
+2263,success,Light Conditions
+2297,success,Light Conditions
+2332,success,Light Conditions
+2232,success,Light Conditions
+2271,success,Light Conditions
+2305,success,Light Conditions
+2240,success,Light Conditions
+2340,success,Light Conditions
+2313,success,Light Conditions
+2279,success,Light Conditions
+2248,success,Light Conditions
+2348,success,Light Conditions
+2287,success,Light Conditions
+2329,success,Light Conditions
+2356,success,Light Conditions
+2295,success,Light Conditions
+2256,success,Light Conditions
+2353,success,Light Conditions
+2303,success,Light Conditions
+2364,success,Light Conditions
+2264,success,Light Conditions
+2361,success,Light Conditions
+2311,success,Light Conditions
+2372,success,Light Conditions
+2272,success,Light Conditions
+2369,success,Light Conditions
+2327,success,Light Conditions
+2380,success,Light Conditions
+2280,fail,Light Conditions
+2377,success,Light Conditions
+2288,success,Light Conditions
+2335,success,Light Conditions
+2388,success,Light Conditions
+2385,success,Light Conditions
+2296,success,Light Conditions
+2396,success,Light Conditions
+2343,success,Light Conditions
+2304,success,Light Conditions
+2393,success,Light Conditions
+2404,success,Light Conditions
+2351,success,Light Conditions
+2312,success,Light Conditions
+2409,success,Light Conditions
+2412,success,Light Conditions
+2320,success,Light Conditions
+2359,success,Light Conditions
+2417,success,Light Conditions
+2420,success,Light Conditions
+2425,success,Light Conditions
+2367,success,Light Conditions
+2328,success,Light Conditions
+2428,success,Light Conditions
+2433,success,Light Conditions
+2336,success,Light Conditions
+2375,success,Light Conditions
+2436,success,Light Conditions
+2344,success,Light Conditions
+2383,success,Light Conditions
+2441,success,Light Conditions
+2444,success,Light Conditions
+2449,success,Light Conditions
+2391,success,Light Conditions
+2452,success,Light Conditions
+2360,success,Light Conditions
+2368,success,Light Conditions
+2460,success,Light Conditions
+2457,success,Light Conditions
+2407,success,Light Conditions
+2376,success,Light Conditions
+2465,success,Light Conditions
+2468,success,Light Conditions
+2415,success,Light Conditions
+2476,success,Light Conditions
+2473,success,Light Conditions
+2384,success,Light Conditions
+2439,success,Light Conditions
+2484,success,Light Conditions
+2481,success,Light Conditions
+2392,success,Light Conditions
+2447,success,Light Conditions
+2489,success,Light Conditions
+2500,success,Light Conditions
+2400,success,Light Conditions
+2455,success,Light Conditions
+2508,success,Light Conditions
+2497,success,Light Conditions
+2408,success,Light Conditions
+2463,success,Light Conditions
+2516,success,Light Conditions
+2505,success,Light Conditions
+2416,success,Light Conditions
+2513,success,Light Conditions
+2479,success,Light Conditions
+2424,success,Light Conditions
+2487,success,Light Conditions
+2432,success,Light Conditions
+2440,success,Light Conditions
+2503,success,Light Conditions
+2448,success,Light Conditions
+2511,success,Light Conditions
+2456,success,Light Conditions
+2464,success,Light Conditions
+2472,success,Light Conditions
+2480,success,Light Conditions
+2488,success,Light Conditions
+2496,success,Light Conditions
+2504,success,Light Conditions
+2512,success,Light Conditions
+5,success,Background Textures
+2,success,Background Textures
+6,success,Background Textures
+26,success,Background Textures
+3,success,Background Textures
+7,success,Background Textures
+42,success,Background Textures
+11,success,Background Textures
+13,success,Background Textures
+19,success,Background Textures
+18,fail,Background Textures
+21,success,Background Textures
+27,success,Background Textures
+55,success,Background Textures
+29,success,Background Textures
+34,success,Background Textures
+35,success,Background Textures
+37,success,Background Textures
+43,success,Background Textures
+45,success,Background Textures
+51,success,Background Textures
+50,success,Background Textures
+69,fail,Background Textures
+59,success,Background Textures
+66,success,Background Textures
+67,success,Background Textures
+61,success,Background Textures
+85,success,Background Textures
+84,success,Background Textures
+83,success,Background Textures
+82,success,Background Textures
+75,fail,Background Textures
+91,success,Background Textures
+99,success,Background Textures
+96,success,Background Textures
+125,success,Background Textures
+93,success,Background Textures
+106,success,Background Textures
+114,success,Background Textures
+109,success,Background Textures
+101,success,Background Textures
+107,success,Background Textures
+138,success,Background Textures
+117,success,Background Textures
+115,success,Background Textures
+147,success,Background Textures
+130,success,Background Textures
+122,success,Background Textures
+146,success,Background Textures
+132,success,Background Textures
+139,success,Background Textures
+157,success,Background Textures
+133,success,Background Textures
+131,success,Background Textures
+155,success,Background Textures
+143,success,Background Textures
+149,success,Background Textures
+171,success,Background Textures
+144,success,Background Textures
+141,success,Background Textures
+181,success,Background Textures
+165,success,Background Textures
+162,success,Background Textures
+186,success,Background Textures
+154,success,Background Textures
+150,success,Background Textures
+197,success,Background Textures
+178,success,Background Textures
+163,success,Background Textures
+168,success,Background Textures
+187,success,Background Textures
+221,success,Background Textures
+194,success,Background Textures
+228,success,Background Textures
+176,success,Background Textures
+179,success,Background Textures
+202,success,Background Textures
+204,success,Background Textures
+245,success,Background Textures
+189,success,Background Textures
+243,fail,Background Textures
+205,success,Background Textures
+212,success,Background Textures
+216,success,Background Textures
+203,success,Background Textures
+259,fail,Robot Initial States
+258,success,Robot Initial States
+218,success,Background Textures
+226,success,Background Textures
+234,success,Background Textures
+227,success,Background Textures
+224,success,Background Textures
+274,success,Robot Initial States
+237,success,Background Textures
+249,success,Robot Initial States
+269,fail,Robot Initial States
+242,success,Background Textures
+235,success,Background Textures
+251,success,Robot Initial States
+283,fail,Robot Initial States
+253,success,Robot Initial States
+282,success,Robot Initial States
+261,fail,Robot Initial States
+250,success,Robot Initial States
+267,success,Robot Initial States
+299,success,Robot Initial States
+298,success,Robot Initial States
+266,success,Robot Initial States
+268,fail,Robot Initial States
+275,fail,Robot Initial States
+277,success,Robot Initial States
+314,success,Robot Initial States
+285,success,Robot Initial States
+291,success,Robot Initial States
+310,fail,Robot Initial States
+276,fail,Robot Initial States
+280,fail,Robot Initial States
+325,fail,Robot Initial States
+323,success,Robot Initial States
+301,success,Robot Initial States
+307,fail,Robot Initial States
+290,success,Robot Initial States
+293,success,Robot Initial States
+349,success,Robot Initial States
+333,success,Robot Initial States
+315,fail,Robot Initial States
+309,success,Robot Initial States
+306,success,Robot Initial States
+320,fail,Robot Initial States
+378,success,Robot Initial States
+347,fail,Robot Initial States
+328,fail,Robot Initial States
+387,success,Robot Initial States
+330,success,Robot Initial States
+331,success,Robot Initial States
+362,fail,Robot Initial States
+329,fail,Robot Initial States
+341,success,Robot Initial States
+338,fail,Robot Initial States
+395,success,Robot Initial States
+346,fail,Robot Initial States
+339,success,Robot Initial States
+373,success,Robot Initial States
+350,fail,Robot Initial States
+404,fail,Robot Initial States
+355,fail,Robot Initial States
+354,fail,Robot Initial States
+386,fail,Robot Initial States
+357,fail,Robot Initial States
+370,success,Robot Initial States
+412,success,Robot Initial States
+371,success,Robot Initial States
+394,success,Robot Initial States
+365,fail,Robot Initial States
+367,fail,Robot Initial States
+381,success,Robot Initial States
+382,success,Robot Initial States
+421,fail,Robot Initial States
+403,success,Robot Initial States
+391,success,Robot Initial States
+380,success,Robot Initial States
+379,success,Robot Initial States
+402,success,Robot Initial States
+411,success,Robot Initial States
+443,fail,Robot Initial States
+401,fail,Robot Initial States
+390,success,Robot Initial States
+389,fail,Robot Initial States
+410,success,Robot Initial States
+457,success,Robot Initial States
+409,success,Robot Initial States
+429,success,Robot Initial States
+399,fail,Robot Initial States
+397,success,Robot Initial States
+427,success,Robot Initial States
+466,fail,Robot Initial States
+442,fail,Robot Initial States
+426,fail,Robot Initial States
+407,success,Robot Initial States
+405,fail,Robot Initial States
+440,fail,Robot Initial States
+438,success,Robot Initial States
+478,success,Robot Initial States
+416,success,Robot Initial States
+450,success,Robot Initial States
+413,success,Robot Initial States
+453,fail,Robot Initial States
+451,fail,Robot Initial States
+491,fail,Robot Initial States
+437,success,Robot Initial States
+423,success,Robot Initial States
+502,success,Robot Initial States
+460,fail,Robot Initial States
+461,fail,Robot Initial States
+445,success,Robot Initial States
+462,fail,Robot Initial States
+474,success,Robot Initial States
+517,fail,Robot Initial States
+435,fail,Robot Initial States
+459,success,Robot Initial States
+475,fail,Robot Initial States
+530,success,Robot Initial States
+485,success,Robot Initial States
+477,fail,Robot Initial States
+469,success,Robot Initial States
+486,success,Robot Initial States
+458,success,Robot Initial States
+490,success,Robot Initial States
+483,success,Robot Initial States
+539,fail,Robot Initial States
+527,success,Robot Initial States
+509,fail,Robot Initial States
+467,fail,Robot Initial States
+501,success,Robot Initial States
+493,success,Robot Initial States
+549,success,Robot Initial States
+533,success,Robot Initial States
+534,success,Robot Initial States
+515,success,Robot Initial States
+482,fail,Robot Initial States
+507,fail,Robot Initial States
+560,fail,Robot Initial States
+544,success,Robot Initial States
+546,success,Robot Initial States
+492,success,Robot Initial States
+529,success,Robot Initial States
+573,success,Robot Initial States
+523,fail,Robot Initial States
+555,success,Robot Initial States
+554,fail,Robot Initial States
+506,success,Robot Initial States
+589,success,Robot Initial States
+538,fail,Robot Initial States
+570,success,Robot Initial States
+565,success,Robot Initial States
+532,fail,Robot Initial States
+605,success,Robot Initial States
+531,success,Robot Initial States
+547,fail,Robot Initial States
+543,success,Robot Initial States
+581,fail,Robot Initial States
+541,success,Robot Initial States
+621,success,Robot Initial States
+602,fail,Robot Initial States
+553,success,Robot Initial States
+597,success,Robot Initial States
+557,fail,Robot Initial States
+651,success,Camera Viewpoints
+552,fail,Robot Initial States
+618,fail,Robot Initial States
+613,success,Robot Initial States
+571,fail,Robot Initial States
+666,success,Camera Viewpoints
+634,success,Robot Initial States
+579,fail,Robot Initial States
+629,success,Robot Initial States
+562,success,Robot Initial States
+676,success,Camera Viewpoints
+649,success,Camera Viewpoints
+587,fail,Robot Initial States
+595,fail,Robot Initial States
+58,success,Background Textures
+53,success,Background Textures
+90,success,Background Textures
+10,success,Background Textures
+74,fail,Background Textures
+77,fail,Background Textures
+170,success,Background Textures
+110,success,Background Textures
+1532,success,Sensor Noise
+1533,success,Sensor Noise
+1531,success,Sensor Noise
+98,success,Background Textures
+1530,success,Sensor Noise
+151,success,Background Textures
+137,success,Background Textures
+229,success,Background Textures
+1537,fail,Sensor Noise
+1535,fail,Sensor Noise
+195,success,Background Textures
+210,success,Background Textures
+211,success,Background Textures
+1541,success,Sensor Noise
+219,success,Background Textures
+222,success,Background Textures
+1545,success,Sensor Noise
+1540,fail,Sensor Noise
+337,fail,Robot Initial States
+418,fail,Robot Initial States
+1538,fail,Sensor Noise
+1539,fail,Sensor Noise
+1550,success,Sensor Noise
+1549,success,Sensor Noise
+322,success,Robot Initial States
+392,success,Robot Initial States
+1553,success,Sensor Noise
+363,success,Robot Initial States
+317,fail,Robot Initial States
+1548,success,Sensor Noise
+1558,success,Sensor Noise
+498,fail,Robot Initial States
+603,success,Robot Initial States
+1547,fail,Sensor Noise
+1546,fail,Sensor Noise
+1562,success,Sensor Noise
+419,success,Robot Initial States
+1557,success,Sensor Noise
+514,success,Robot Initial States
+434,fail,Robot Initial States
+1571,success,Sensor Noise
+1554,success,Sensor Noise
+1556,success,Sensor Noise
+1570,success,Sensor Noise
+635,fail,Robot Initial States
+1555,success,Sensor Noise
+619,success,Robot Initial States
+525,success,Robot Initial States
+499,success,Robot Initial States
+594,fail,Robot Initial States
+1582,fail,Sensor Noise
+1563,success,Sensor Noise
+1581,success,Sensor Noise
+1566,success,Sensor Noise
+1565,success,Sensor Noise
+652,success,Camera Viewpoints
+1579,success,Sensor Noise
+643,fail,Robot Initial States
+610,fail,Robot Initial States
+586,fail,Robot Initial States
+650,success,Camera Viewpoints
+1578,success,Sensor Noise
+669,success,Camera Viewpoints
+1596,success,Sensor Noise
+1603,success,Sensor Noise
+659,success,Camera Viewpoints
+1602,success,Sensor Noise
+1590,fail,Sensor Noise
+667,success,Camera Viewpoints
+626,fail,Robot Initial States
+1598,success,Sensor Noise
+637,fail,Robot Initial States
+683,success,Camera Viewpoints
+1614,success,Sensor Noise
+1613,success,Sensor Noise
+1619,fail,Sensor Noise
+675,success,Camera Viewpoints
+682,success,Camera Viewpoints
+1610,success,Sensor Noise
+1618,success,Sensor Noise
+1600,success,Sensor Noise
+695,success,Camera Viewpoints
+653,success,Camera Viewpoints
+1627,success,Sensor Noise
+690,success,Camera Viewpoints
+693,success,Camera Viewpoints
+645,fail,Robot Initial States
+1626,success,Sensor Noise
+1630,success,Sensor Noise
+670,success,Camera Viewpoints
+1629,success,Sensor Noise
+701,success,Camera Viewpoints
+706,success,Camera Viewpoints
+661,success,Camera Viewpoints
+1638,success,Sensor Noise
+685,success,Camera Viewpoints
+1622,fail,Sensor Noise
+718,success,Camera Viewpoints
+1637,fail,Sensor Noise
+714,success,Camera Viewpoints
+717,success,Camera Viewpoints
+1643,success,Sensor Noise
+1621,fail,Sensor Noise
+698,success,Camera Viewpoints
+691,success,Camera Viewpoints
+731,success,Camera Viewpoints
+1635,success,Sensor Noise
+1659,success,Sensor Noise
+725,success,Camera Viewpoints
+730,success,Camera Viewpoints
+1653,success,Sensor Noise
+1674,fail,Sensor Noise
+722,success,Camera Viewpoints
+702,success,Camera Viewpoints
+1650,success,Sensor Noise
+1634,fail,Sensor Noise
+739,success,Camera Viewpoints
+1670,success,Sensor Noise
+746,success,Camera Viewpoints
+778,success,Camera Viewpoints
+1662,success,Sensor Noise
+1685,success,Sensor Noise
+733,success,Camera Viewpoints
+1658,success,Sensor Noise
+1646,fail,Sensor Noise
+762,success,Camera Viewpoints
+1683,success,Sensor Noise
+715,success,Camera Viewpoints
+794,success,Camera Viewpoints
+755,fail,Camera Viewpoints
+1675,success,Sensor Noise
+1693,success,Sensor Noise
+1669,success,Sensor Noise
+749,success,Camera Viewpoints
+726,success,Camera Viewpoints
+1702,success,Sensor Noise
+1645,success,Sensor Noise
+773,fail,Camera Viewpoints
+1678,success,Sensor Noise
+1686,success,Sensor Noise
+803,fail,Camera Viewpoints
+1706,success,Sensor Noise
+771,fail,Camera Viewpoints
+741,success,Camera Viewpoints
+1682,success,Sensor Noise
+1714,success,Sensor Noise
+1654,success,Sensor Noise
+789,success,Camera Viewpoints
+779,fail,Camera Viewpoints
+1694,success,Sensor Noise
+757,success,Camera Viewpoints
+816,fail,Camera Viewpoints
+797,success,Camera Viewpoints
+1723,success,Sensor Noise
+1688,success,Sensor Noise
+1690,success,Sensor Noise
+1715,fail,Sensor Noise
+1666,success,Sensor Noise
+795,success,Camera Viewpoints
+772,success,Camera Viewpoints
+1707,success,Sensor Noise
+813,fail,Camera Viewpoints
+1699,success,Sensor Noise
+810,fail,Camera Viewpoints
+1701,success,Sensor Noise
+827,fail,Camera Viewpoints
+1733,success,Sensor Noise
+1677,success,Sensor Noise
+787,success,Camera Viewpoints
+1725,success,Sensor Noise
+817,fail,Camera Viewpoints
+1716,success,Sensor Noise
+841,success,Camera Viewpoints
+1713,success,Sensor Noise
+1710,fail,Sensor Noise
+826,fail,Camera Viewpoints
+1742,success,Sensor Noise
+819,fail,Camera Viewpoints
+799,success,Camera Viewpoints
+829,success,Camera Viewpoints
+1734,success,Sensor Noise
+1687,success,Sensor Noise
+837,success,Camera Viewpoints
+835,success,Camera Viewpoints
+1722,success,Sensor Noise
+842,success,Camera Viewpoints
+1718,success,Sensor Noise
+1726,success,Sensor Noise
+853,fail,Camera Viewpoints
+1754,success,Sensor Noise
+821,fail,Camera Viewpoints
+1698,success,Sensor Noise
+851,success,Camera Viewpoints
+1743,fail,Sensor Noise
+1731,success,Sensor Noise
+845,fail,Camera Viewpoints
+858,fail,Camera Viewpoints
+836,success,Camera Viewpoints
+1737,success,Sensor Noise
+1730,success,Sensor Noise
+1764,success,Sensor Noise
+869,fail,Camera Viewpoints
+1709,fail,Sensor Noise
+1755,success,Sensor Noise
+867,fail,Camera Viewpoints
+1741,success,Sensor Noise
+861,fail,Camera Viewpoints
+850,success,Camera Viewpoints
+1746,success,Sensor Noise
+1739,success,Sensor Noise
+1765,success,Sensor Noise
+874,fail,Camera Viewpoints
+882,success,Camera Viewpoints
+1717,success,Sensor Noise
+1774,success,Sensor Noise
+899,success,Camera Viewpoints
+1750,fail,Sensor Noise
+891,success,Camera Viewpoints
+1757,success,Sensor Noise
+866,fail,Camera Viewpoints
+1778,success,Sensor Noise
+1749,fail,Sensor Noise
+885,success,Camera Viewpoints
+909,success,Camera Viewpoints
+1738,success,Sensor Noise
+1763,success,Sensor Noise
+1795,success,Sensor Noise
+898,success,Camera Viewpoints
+903,success,Camera Viewpoints
+1766,success,Sensor Noise
+1789,success,Sensor Noise
+1762,success,Sensor Noise
+880,success,Camera Viewpoints
+901,success,Camera Viewpoints
+1804,success,Sensor Noise
+907,success,Camera Viewpoints
+1747,success,Sensor Noise
+929,success,Camera Viewpoints
+914,success,Camera Viewpoints
+1773,success,Sensor Noise
+1779,success,Sensor Noise
+1797,success,Sensor Noise

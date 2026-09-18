@@ -238,7 +238,7 @@ class DiffusionPolicySteer(DiffusionPolicy):
         return actions[:, start:end]
 
     def _guided_conditional_sample(
-        self,
+        self, 
         batch_size: int,
         global_cond: Tensor,
         generator: Optional[torch.Generator] = None,

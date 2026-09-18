@@ -18,7 +18,7 @@ backend: libero_plus
 libero_plus:
   # Suites: libero_spatial, libero_object, libero_goal, libero_10, libero_mix
   # (libero_mix holds the combined/compositional perturbations)
-  suite_name: libero_spatial
+  suite_name: libero_10
 
   camera_name: agentview_image, robot0_eye_in_hand_image
   obs_type: pixels_agent_pos

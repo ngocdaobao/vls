@@ -28,8 +28,15 @@ class VLMAgent:
         self.config = config
         self.env_type = env_type
 
-        # Any OpenAI-compatible endpoint: OpenAI, Azure, Gemini, Anthropic
-        base_url = config.get('base_url') or os.environ.get('AZURE_OPENAI_BASE_URL')  # For Azure OpenAI
+        # Any OpenAI-compatible endpoint: OpenAI, Azure, Gemini, Anthropic.
+        # VLM_BASE_URL wins over the config value so a second server can be
+        # targeted without touching configs/perception.yaml (which a running job
+        # may still be reading). Unset -> unchanged behaviour.
+        base_url = (
+            os.environ.get('VLM_BASE_URL')
+            or config.get('base_url')
+            or os.environ.get('AZURE_OPENAI_BASE_URL')  # For Azure OpenAI
+        )
         self.is_gemini = bool(base_url) and 'generativelanguage.googleapis.com' in base_url
 
         api_key = config.get('api_key')

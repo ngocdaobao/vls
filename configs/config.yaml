@@ -71,7 +71,7 @@ main:
   vlm_query_limit: 7  # Max VLM queries per episode
   use_diversity: true
   sample_batch_size: 1
-  guide_scale: 2.0
+  guide_scale: 1.5
   diversity_scale: 2.0
   start_ratio: None
   MCMC_steps: 4
