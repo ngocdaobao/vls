@@ -1,0 +1,55 @@
+# @package policy
+# Policy Configuration for GR00T N1.7 evaluation (main_gr00t.py)
+#
+# This file exists so the PI0.5 config (configs/policy.yaml) stays untouched.
+# main_gr00t.py loads it through configs/config_gr00t.yaml.
+
+# Current policy type: diffusion or groot
+type: groot
+
+# ============================================================
+# Diffusion Policy
+# ============================================================
+diffusion:
+  pretrained_path: /home/shuo/research/lerobot/outputs/train/2026-02-24/11-34-07_vls_maniskill_rotate/checkpoints/100000/pretrained_model
+  num_inference_steps: 100
+  n_obs_steps: 2
+  action_chunk_horizon: 16
+
+# ============================================================
+# GR00T N1.7 Policy (for LIBERO)
+# ============================================================
+groot:
+  # Either a raw NVIDIA GR00T N1.7 checkpoint (the base model, or one finetuned
+  # with Isaac-GR00T) or a finetuned LeRobot GrootPolicy checkpoint. N1.7 loads
+  # both: GrootPolicy.from_pretrained detects which it is.
+  #
+  # The base model below is NOT finetuned on LIBERO. It loads and runs, but for
+  # real numbers point this at a LIBERO-finetuned N1.7 checkpoint and set
+  # `embodiment_tag: libero_sim` below.
+  pretrained_path: nvidia/GR00T-N1.7-3B
+
+  # Denoising steps for the flow-matching action head. Leave at the checkpoint's
+  # own value by removing this key; 10 keeps parity with the PI0.5 setup.
+  num_inference_steps: 10
+
+  # How many steps of the predicted chunk are guided and executed. Clamped to
+  # the action head's own horizon (40 for N1.7; the checkpoint's own execution
+  # horizon is 8 for the libero_sim embodiment).
+  action_chunk_horizon: 8
+
+  # Optional: LeRobot dataset whose min/max statistics normalize state and
+  # action. Only needed when the checkpoint carries no statistics of its own
+  # for the configured embodiment tag.
+  dataset_repo_id: null
+
+  # GrootConfig fields forwarded to GrootPolicy.from_pretrained as overrides.
+  # `embodiment_tag` is the important one: it picks which of the checkpoint's
+  # embodiments supplies the normalization statistics and the action horizon,
+  # and setting it to `libero_sim` also switches on N1.7's LIBERO gripper
+  # action decode. Leave the mapping empty to use the checkpoint's own values.
+  # Keys left null are not forwarded. Add others with Hydra's append syntax:
+  #   python main_gr00t.py policy.groot.config_overrides.embodiment_tag=libero_sim
+  #   python main_gr00t.py +policy.groot.config_overrides.use_flash_attention=true
+  config_overrides:
+    embodiment_tag: null

@@ -35,6 +35,7 @@ MANIFEST
 
 # Virtual environments
 .venv/
+.venv_gr00t/
 venv/
 env/
 ENV/

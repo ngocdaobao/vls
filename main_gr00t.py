@@ -1,15 +1,22 @@
 """
-VLS Main Entry Point - Supports multiple backends (CALVIN, LIBERO, RealWorld)
+VLS Main Entry Point (GR00T) - Steered evaluation with NVIDIA GR00T N1.7.
 
-Uses Hydra for configuration management and EnvAdapter abstraction layer.
+This is the GR00T counterpart of ``main.py``. It runs the same steering
+algorithm and the same evaluation loop; only the policy differs. ``main.py``
+and ``core/pi05_steer.py`` are left untouched, so PI0.5 evaluation is
+unaffected by anything here.
+
+It reads ``configs/config_gr00t.yaml`` (not ``configs/config.yaml``), which
+pulls in ``configs/policy_gr00t.yaml`` and otherwise reuses the same backend
+and perception configs.
+
+GR00T needs its own virtual environment (``.venv_gr00t``); see README_GR00T.md.
 
 Usage:
-    python main.py                                    # Default: calvin + drawer_open
-    python main.py env=calvin task=drawer_open        # Explicit (auto-loads task/calvin/drawer_open.yaml)
-    python main.py env=libero task=goal               # Switch to LIBERO goal task
-    python main.py backend=libero_plus                # LIBERO-plus OOD/perturbation eval
-    python main.py main.episode_num=50                # Override parameters
-    python main.py +experiment=debug                  # Use experiment config
+    python main_gr00t.py                              # LIBERO-plus + GR00T N1.7
+    python main_gr00t.py backend=libero_plus backend.libero_plus.suite_name=libero_object
+    python main_gr00t.py main.episode_num=50          # Override parameters
+    python main_gr00t.py main.gpus=all                # Multi-GPU sharded eval
 """
  
 import os
@@ -78,7 +85,7 @@ from vlm_query.vlm_agent import VLMAgent
 from utils.vis_utils import TrajectoryVideoRecorder, add_text_to_image
 
 from core.diffusion_policy_steer import DiffusionPolicySteer
-from core.pi05_steer import PI05PolicySteer
+from core.gr00t_steer import GrootPolicySteer
 from lerobot.policies.diffusion.modeling_diffusion import DiffusionPolicy
 from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
 from lerobot.policies.factory import make_pre_post_processors
@@ -515,23 +522,63 @@ class Main:
         
         if policy_type == 'diffusion':
             self.policy = DiffusionPolicySteer.from_pretrained(pretrained_path)
-        elif policy_type == 'pi05':
-            self.policy = PI05PolicySteer.from_pretrained(pretrained_path)
+        elif policy_type == 'groot':
+            # config_overrides land on GrootConfig (embodiment_tag, chunk_size,
+            # use_flash_attention, ...). from_pretrained applies them whether
+            # the path is a raw N1.7 checkpoint or a finetuned LeRobot one.
+            groot_overrides = {
+                key: value
+                for key, value in OmegaConf.to_container(
+                    type_config.get('config_overrides', {}) or {}, resolve=True
+                ).items()
+                if value is not None  # null means "keep the checkpoint's value"
+            }
+            if groot_overrides:
+                log.info(f"GrootConfig overrides: {groot_overrides}")
+            self.policy = GrootPolicySteer.from_pretrained(pretrained_path, **groot_overrides)
         else:
-            raise ValueError(f"Unknown policy type: {policy_type}")
+            raise ValueError(f"Unknown policy type: {policy_type} (main_gr00t.py serves 'groot'; use main.py for pi05)")
         
         self.device = cfg.get('device', 'cuda')
         self.policy.to(self.device)
 
-        preprocessor_overrides = {
-            "device_processor": {"device": str(self.policy.config.device)},
-        }
+        if policy_type == 'groot':
+            # GR00T N1.7 builds its processors through its own entry point: it
+            # handles both a raw NVIDIA N1.7 checkpoint (where the pipelines are
+            # constructed from the checkpoint's sidecar assets) and a serialized
+            # LeRobot pipeline, and it re-links the pack/decode step pair that
+            # relative-action decoding needs. Going through it directly keeps
+            # that wiring intact.
+            from lerobot.policies.groot.processor_groot import (
+                make_groot_pre_post_processors_from_pretrained,
+            )
 
-        self.policy_preprocessor, self.policy_postprocessor = make_pre_post_processors(
-            policy_cfg=self.policy.config, 
-            pretrained_path=pretrained_path, 
-            preprocessor_overrides=preprocessor_overrides,
-        )
+            groot_kwargs = {}
+            dataset_repo_id = type_config.get('dataset_repo_id', None)
+            if dataset_repo_id:
+                # Normalization statistics, for a checkpoint that carries none
+                # of its own (e.g. a raw base model with 'new_embodiment').
+                log.info(f"Loading dataset stats for normalization from: {dataset_repo_id}")
+                groot_kwargs['dataset_stats'] = LeRobotDatasetMetadata(dataset_repo_id).stats
+
+            self.policy_preprocessor, self.policy_postprocessor = (
+                make_groot_pre_post_processors_from_pretrained(
+                    config=self.policy.config,
+                    pretrained_path=pretrained_path,
+                    preprocessor_overrides={
+                        "device_processor": {"device": str(self.policy.config.device)},
+                    },
+                    **groot_kwargs,
+                )
+            )
+        else:
+            self.policy_preprocessor, self.policy_postprocessor = make_pre_post_processors(
+                policy_cfg=self.policy.config,
+                pretrained_path=pretrained_path,
+                preprocessor_overrides={
+                    "device_processor": {"device": str(self.policy.config.device)},
+                },
+            )
 
         self.policy.post_init(
             adapter=self.adapter,
@@ -1255,37 +1302,31 @@ class Main:
             log.info(f"  [{i}] {obj_name}: position=[{kp[0]:.4f}, {kp[1]:.4f}, {kp[2]:.4f}]")
 
 
-@hydra.main(version_base=None, config_path="configs", config_name="config")
+@hydra.main(version_base=None, config_path="configs", config_name="config_gr00t")
 def main(cfg: DictConfig) -> None:
     """
-    Main entry point with Hydra configuration.
-    
+    GR00T entry point with Hydra configuration.
+
+    Reads configs/config_gr00t.yaml, which selects policy_gr00t.yaml and
+    otherwise shares the backend/perception configs with main.py.
+
     Usage:
-        # CALVIN (uses task configs)
-        python main.py env=calvin task=drawer_open
-        python main.py env=calvin task=button_on
-        
         # LIBERO (uses suite_name directly, no task configs)
-        python main.py env=libero env.libero.suite_name=libero_goal
-        python main.py env=libero env.libero.suite_name=libero_spatial
+        python main_gr00t.py backend=libero backend.libero.suite_name=libero_goal
 
         # LIBERO-plus OOD evaluation (perturbations are task variants of a suite)
-        python main.py backend=libero_plus
-        python main.py backend=libero_plus backend.libero_plus.perturbation_categories=[camera]
-        
+        python main_gr00t.py backend=libero_plus
+        python main_gr00t.py backend=libero_plus backend.libero_plus.perturbation_categories=[camera]
+
         # Multi-GPU: worker processes over the given GPUs, disjoint tasks/episodes each
-        python main.py backend=libero_plus main.gpus=all
-        python main.py backend=libero_plus main.gpus=[0,1,2,3] \
-                       backend.libero_plus.suite_name=libero_object backend.libero_plus.start_id=0 backend.libero_plus.end_id=499
-        python main.py main.gpus=[0,2,3] backend.libero_plus.suite_name=libero_spatial main.num_workers=8 main.rerun_error_dir=outputs/libero_spatial
-        # More workers than GPUs: 8 concurrent VLM clients spread over 3 GPUs
-        python main.py backend=libero_plus main.gpus=[0,1,2] main.num_workers=8
+        python main_gr00t.py backend=libero_plus main.gpus=all
+        python main_gr00t.py main.gpus=[0,2,3] backend.libero_plus.suite_name=libero_spatial main.num_workers=8
 
         # Re-run only the tasks a previous run failed to produce a rollout for
-        python main.py backend=libero_plus backend.libero_plus.suite_name=libero_spatial main.gpus=[0,2,3] main.num_workers=8 main.rerun_error_dir=outputs/libero_spatial
+        python main_gr00t.py backend=libero_plus main.gpus=[0,2,3] main.rerun_error_dir=outputs/libero_spatial
 
         # Override parameters
-        python main.py main.episode_num=50 main.guide_scale=120
+        python main_gr00t.py main.episode_num=50 main.guide_scale=120
     """
     # Print resolved config
     log.info(f"Working directory: {os.getcwd()}")

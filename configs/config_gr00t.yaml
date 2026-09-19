@@ -1,0 +1,91 @@
+# VLS Main Configuration - GR00T N1.7 variant (main_gr00t.py)
+#
+# Identical to configs/config.yaml except that it selects policy_gr00t.yaml
+# instead of policy.yaml, so the PI0.5 configuration is left untouched.
+#
+# Usage:
+#   python main_gr00t.py
+#   python main_gr00t.py backend=libero_plus backend.libero_plus.suite_name=libero_object
+#   python main_gr00t.py main.episode_num=50
+
+defaults:
+  - backend: libero_plus     # Environment (calvin/libero/libero_plus)
+  - perception               # Perception modules (shared with main.py)
+  - policy_gr00t             # GR00T policy config
+  - _self_
+
+# ============================================================
+# Global Settings
+# ============================================================
+device: cuda
+seed: 0
+
+# ============================================================
+# Main Experiment Settings
+# ============================================================
+main:
+  episode_num: 50
+  output_dir: results
+
+  # ---- Multi-GPU evaluation (libero_plus) ----
+  # See configs/config.yaml for the full explanation; the launcher behaves
+  # identically here, re-invoking main_gr00t.py per shard.
+  gpus: null
+  num_workers: null
+  shard_index: 0
+  shard_count: 1
+
+  # ---- Result CSV (libero_plus) ----
+  result_dir: result
+  skip_completed: true
+
+  # ---- Re-running failed tasks ----
+  rerun_error_dir: null
+  rerun_cleanup: true
+  task_ids_file: null
+  cached_functions_dir: null
+  visualize_trajectory: true
+  debug_draw_trajectory: true
+  render: false
+
+  # Steering parameters
+  use_guidance: true
+  use_vlm_stage_recognition: true
+  vlm_query_limit: 7
+  use_diversity: true
+  sample_batch_size: 1
+  guide_scale: 1.5
+  diversity_scale: 2.0
+  start_ratio: None
+  MCMC_steps: 4
+
+  sigmoid_k: 5.0
+  sigmoid_x0: 0.4
+
+  # FKD (Feynman-Kac Diffusion)
+  use_fkd: true
+  fkd:
+    potential_type: max
+    lmbda: 2.0
+    adaptive_resampling: true
+    resample_frequency: 4
+
+# ============================================================
+# Experiment Tracking
+# ============================================================
+experiment:
+  name: ${backend.backend}
+  tags:
+    - ${backend.backend}
+
+# ============================================================
+# Hydra Settings
+# ============================================================
+hydra:
+  run:
+    dir: outputs/${experiment.name}/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: outputs/${experiment.name}/multirun/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: false
