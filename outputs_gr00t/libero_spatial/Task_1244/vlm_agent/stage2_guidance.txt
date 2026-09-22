@@ -1,0 +1,16 @@
+def stage2_guidance(keypoints, action_sequence):
+    # The flat dish is the plate, which is represented by keypoints 10, 11, 12
+    # We use the mean of these three keypoints to represent the center of the plate
+    plate_keypoints = torch.tensor([10, 11, 12], dtype=torch.long, device=keypoints.device)
+    plate_center = keypoints[plate_keypoints].mean(dim=0)
+    
+    T = action_sequence.shape[1]
+    timesteps = torch.arange(T, device=action_sequence.device)
+    final_start = int(0.7 * T)
+    weights = torch.where(timesteps >= final_start, torch.tensor(3.0, device=action_sequence.device), torch.tensor(1.0, device=action_sequence.device))
+    weights = weights / weights.sum()
+
+    all_dists = torch.norm(action_sequence - plate_center, dim=-1)
+    reward = -(all_dists ** 2 * weights).sum(dim=1)
+    return reward.mean()
+

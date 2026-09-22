@@ -1,0 +1,39 @@
+```python
+# Task breakdown:
+# Stage 1: Move gripper to grasp the darkcolored rounded container next to the container of baked sweet treats (keypoint 3, which is the dark bowl on the table, next to the cookies)
+# Stage 2: Move gripper with the grasped container to the flat dish (keypoints 10, 11, 12, which form the plate)
+
+num_stages = 2
+
+### stage 1 guidance
+def stage1_guidance(keypoints, action_sequence):
+    T = action_sequence.shape[1]
+    timesteps = torch.arange(T, device=action_sequence.device)
+    final_start = int(0.7 * T)
+    weights = torch.where(timesteps >= final_start, torch.tensor(3.0, device=action_sequence.device), torch.tensor(1.0, device=action_sequence.device))
+    weights = weights / weights.sum()
+
+    # From the image, the darkcolored rounded container next to the baked sweet treats (cookies) is the bowl at keypoint 3
+    target_idx = torch.tensor([3], dtype=torch.long, device=keypoints.device)
+    target_pos = keypoints[target_idx][0]
+    all_dists = torch.norm(action_sequence - target_pos, dim=-1)
+    reward = -(all_dists ** 2 * weights).sum(dim=1)
+    return reward.mean()
+
+### stage 2 guidance
+def stage2_guidance(keypoints, action_sequence):
+    # The flat dish is the plate, which is represented by keypoints 10, 11, 12
+    # We use the mean of these three keypoints to represent the center of the plate
+    plate_keypoints = torch.tensor([10, 11, 12], dtype=torch.long, device=keypoints.device)
+    plate_center = keypoints[plate_keypoints].mean(dim=0)
+    
+    T = action_sequence.shape[1]
+    timesteps = torch.arange(T, device=action_sequence.device)
+    final_start = int(0.7 * T)
+    weights = torch.where(timesteps >= final_start, torch.tensor(3.0, device=action_sequence.device), torch.tensor(1.0, device=action_sequence.device))
+    weights = weights / weights.sum()
+
+    all_dists = torch.norm(action_sequence - plate_center, dim=-1)
+    reward = -(all_dists ** 2 * weights).sum(dim=1)
+    return reward.mean()
+```

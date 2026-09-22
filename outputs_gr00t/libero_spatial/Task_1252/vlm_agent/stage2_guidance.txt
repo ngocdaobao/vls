@@ -1,0 +1,19 @@
+def stage2_guidance(keypoints, action_sequence):
+    T = action_sequence.shape[1]
+    timesteps = torch.arange(T, device=action_sequence.device)
+    final_start = int(0.7 * T)
+    weights = torch.where(timesteps >= final_start, torch.tensor(3.0, device=action_sequence.device), torch.tensor(1.0, device=action_sequence.device))
+    weights = weights / weights.sum()
+
+    # Define the plate as the target location using keypoints 7, 8, 9
+    plate_keypoints = torch.tensor([7, 8, 9], dtype=torch.long, device=keypoints.device)
+    plate_center = keypoints[plate_keypoints].mean(dim=0)
+    target_pos = plate_center
+
+    # Use XY coordinates with higher weight since the object is placed on top of the plate
+    xy_dist = torch.norm(action_sequence[..., :2] - target_pos[:2], dim=-1)
+    z_dist = torch.abs(action_sequence[..., 2] - target_pos[2])
+    total_dist = xy_dist + z_dist
+    reward = -(total_dist ** 2 * weights).sum(dim=1)
+    return reward.mean()
+

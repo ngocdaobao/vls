@@ -1,0 +1,14 @@
+Error during episode preparation:
+Traceback (most recent call last):
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/main_gr00t.py", line 1007, in run
+    self.perform_task_for_episode(episode_dir)
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/main_gr00t.py", line 838, in perform_task_for_episode
+    key_points, projected_img, mask_ids = self.keypoint_detector.get_keypoints(
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/core/keypoint_detector.py", line 202, in get_keypoints
+    candidate_keypoints, candidate_pixels, candidate_rigid_group_ids = self._cluster_features(
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/core/keypoint_detector.py", line 398, in _cluster_features
+    obj_features_flat = features_flat[binary_mask.reshape(-1)]
+                        ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 46.00 MiB. GPU 0 has a total capacity of 79.27 GiB of which 37.25 MiB is free. Process 143743 has 13.08 GiB memory in use. Process 143742 has 13.20 GiB memory in use. Process 143744 has 13.30 GiB memory in use. Process 143741 has 13.20 GiB memory in use. Process 143740 has 13.12 GiB memory in use. Process 143739 has 13.30 GiB memory in use. Of the allocated memory 12.42 GiB is allocated by PyTorch, and 137.87 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

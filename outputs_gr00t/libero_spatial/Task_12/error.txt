@@ -1,0 +1,62 @@
+Error during episode execution:
+Traceback (most recent call last):
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/main_gr00t.py", line 1031, in run
+    self._run_episode(task_id, episode, episode_dir)
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/main_gr00t.py", line 1194, in _run_episode
+    action_chunk = self.policy.select_action(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/core/gr00t_steer.py", line 265, in select_action
+    action_chunk = self._sample_actions_guided(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/core/gr00t_steer.py", line 402, in _sample_actions_guided
+    model_output = head.model(
+                   ^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/lerobot/policies/groot/action_head/cross_attention_dit.py", line 360, in forward
+    hidden_states = block(
+                    ^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/lerobot/policies/groot/action_head/cross_attention_dit.py", line 200, in forward
+    ff_output = self.ff(norm_hidden_states)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/diffusers/models/attention.py", line 1741, in forward
+    hidden_states = module(hidden_states)
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/diffusers/models/activations.py", line 88, in forward
+    hidden_states = self.proj(hidden_states)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pfss/mlde/workspaces/mlde_wsp_MGPATH/ngoc/vls/.venv_gr00t/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 125, in forward
+    return F.linear(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 18.00 MiB. GPU 0 has a total capacity of 79.27 GiB of which 15.25 MiB is free. Process 143743 has 13.10 GiB memory in use. Process 143742 has 13.20 GiB memory in use. Process 143744 has 13.30 GiB memory in use. Process 143741 has 13.20 GiB memory in use. Process 143740 has 13.11 GiB memory in use. Process 143739 has 13.32 GiB memory in use. Of the allocated memory 12.66 GiB is allocated by PyTorch, and 113.94 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
