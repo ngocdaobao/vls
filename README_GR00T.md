@@ -1,5 +1,23 @@
 # VLS with GR00T N1.7
 
+### VLM server
+Set up VLM agent in a separate venv and process
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install vllm
+```
+
+Run agent
+```bash
+export VLLM_ENGINE_READY_TIMEOUT_S="${VLLM_ENGINE_READY_TIMEOUT_S:-3600}"
+
+CUDA_VISIBLE_DEVICES=3 python -m vllm.entrypoints.openai.api_server \
+    --model Qwen/Qwen3-VL-30B-A3B-Instruct \
+    --port 8000 \
+    --max-model-len 20000 \
+    --max-num-seqs 16
+```
 
 ### 1. Create `.venv_gr00t`
 
