@@ -11,8 +11,8 @@ libero:
   # LIBERO-PRO perturbed suites with object: libero_goal_object, libero_spatial_object, libero_object_object, libero_10_object
   # LIBERO-PRO perturbed suites with swap: libero_goal_swap, libero_spatial_swap, libero_object_swap, libero_10_swap
   
-  suite_name: libero_goal
-  task_id: 0 
+  suite_name: libero_spatial
+  task_id: null 
   camera_name: agentview_image, robot0_eye_in_hand_image
   obs_type: pixels_agent_pos
   render_mode: rgb_array

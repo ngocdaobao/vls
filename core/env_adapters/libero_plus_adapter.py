@@ -1465,10 +1465,13 @@ class LiberoPlusAdapter(BaseEnvAdapter):
         action_transition = self.env_postprocessor(action_transition)
         action = action_transition["action"]
         # Convert to CPU / numpy.
-        action_numpy: np.ndarray = action.to("cpu").numpy()
+        action_numpy: np.ndarray = action.to("cpu").numpy().copy()
 
-        # Convert gripper action to binary (-1 or 1)
-        action[-1] = 1 if action[-1] > 0 else -1
+        # Convert gripper action to binary (-1 or 1). This has to be written to
+        # `action_numpy`, which is what gets stepped: `.to("cpu")` on a CUDA
+        # tensor returns a copy, so mutating `action` after the conversion (as
+        # this did) left the executed action untouched.
+        action_numpy[-1] = 1.0 if action_numpy[-1] > 0 else -1.0
 
         current_env = self._env[self.current_task_idx]
         observation, reward, terminated, truncated, info = current_env.step(action_numpy)

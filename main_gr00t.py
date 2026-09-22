@@ -41,6 +41,9 @@ import time
 import sys
 import json
 import warnings
+from pathlib import Path
+
+from huggingface_hub import snapshot_download
 
 # Hydra imports
 import hydra
@@ -86,6 +89,7 @@ from utils.vis_utils import TrajectoryVideoRecorder, add_text_to_image
 
 from core.diffusion_policy_steer import DiffusionPolicySteer
 from core.gr00t_steer import GrootPolicySteer
+from lerobot.policies.groot.configuration_groot import GROOT_ACTION_DECODE_TRANSFORM_LIBERO
 from lerobot.policies.diffusion.modeling_diffusion import DiffusionPolicy
 from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
 from lerobot.policies.factory import make_pre_post_processors
@@ -98,6 +102,43 @@ from utils.logging_utils import SteerLogger
 
 # Create logger instance
 log = SteerLogger("Main")
+
+
+def resolve_groot_checkpoint(pretrained_path: str) -> str:
+    """Materialize a GR00T checkpoint as a local directory.
+
+    N1.7's raw-checkpoint detection (``is_raw_groot_n1_7_checkpoint``) and the
+    embodiment / action-horizon inference helpers all read their sidecar files
+    as ``Path(model_path) / "config.json"`` and ``.../processor_config.json``,
+    so a Hub repo id makes every one of them return ``None`` or ``False``
+    instead of failing. The checkpoint is then mistaken for a serialized
+    LeRobot pipeline and ``make_groot_pre_post_processors_from_pretrained``
+    looks up ``policy_preprocessor.json`` on the Hub, which a raw NVIDIA
+    checkpoint does not have -- a 404 several hundred lines away from the
+    cause. Downloading the snapshot first keeps those helpers on the local
+    path they were written for; a path that is already a directory is
+    returned unchanged.
+    """
+    path = Path(pretrained_path).expanduser()
+    if path.is_dir():
+        return str(path)
+
+    log.info(f"Resolving GR00T checkpoint '{pretrained_path}' to a local snapshot")
+    local_path = Path(snapshot_download(repo_id=str(pretrained_path)))
+
+    # A raw NVIDIA N1.7 checkpoint that lost its config.json on the way to the
+    # Hub loads neither way: GR00TN17.from_pretrained has no model config, and
+    # the missing file also makes is_raw_groot_n1_7_checkpoint answer False, so
+    # the processor factory falls through to the serialized-pipeline branch.
+    # Say that here rather than let it surface as a 404.
+    if not (local_path / "config.json").exists() and (local_path / "processor_config.json").exists():
+        raise FileNotFoundError(
+            f"GR00T checkpoint '{pretrained_path}' has no config.json, but it carries the sidecar "
+            f"files of a raw NVIDIA N1.7 checkpoint ({local_path}). Upload the checkpoint's "
+            f"config.json to that repo (it is the GR00TN17Config the weights were saved with), or "
+            f"point policy.groot.pretrained_path at a local directory that has one."
+        )
+    return str(local_path)
 
 
 def breakdown_lines(episode_records: List[dict]) -> List[str]:
@@ -518,6 +559,11 @@ class Main:
         # Get pretrained_path from the specific policy type config
         type_config = policy_config.get(policy_type, {})
         pretrained_path = type_config.get('pretrained_path', 'Vision-Language-Steering/vls_calvin_base')
+        if policy_type == 'groot':
+            # Both GrootPolicy.from_pretrained and the processor factory below need a
+            # local directory to read N1.7's sidecar files from; a Hub repo id is not
+            # one. See resolve_groot_checkpoint.
+            pretrained_path = resolve_groot_checkpoint(pretrained_path)
         log.info(f"Loading {policy_type} from: {pretrained_path}")
         
         if policy_type == 'diffusion':
@@ -533,9 +579,27 @@ class Main:
                 ).items()
                 if value is not None  # null means "keep the checkpoint's value"
             }
+            # `action_decode_transform` is a *derived* field: GrootConfig.__post_init__
+            # resolves its 'auto' sentinel from `embodiment_tag` (libero_sim -> 'libero',
+            # anything else -> None). GrootPolicy.from_pretrained applies the overrides
+            # below with setattr *after* the dataclass is constructed, so overriding
+            # `embodiment_tag` alone leaves the transform resolved for the default
+            # embodiment ('new_embodiment' -> None). That silently disables N1.7's LIBERO
+            # gripper decode: the gripper action stays in the checkpoint's [0, 1] range
+            # instead of LIBERO's {-1, +1}, so the gripper is never commanded open and
+            # every episode fails. Resolve it here unless the config sets it explicitly.
+            if (
+                groot_overrides.get('embodiment_tag') == 'libero_sim'
+                and 'action_decode_transform' not in groot_overrides
+            ):
+                groot_overrides['action_decode_transform'] = GROOT_ACTION_DECODE_TRANSFORM_LIBERO
             if groot_overrides:
                 log.info(f"GrootConfig overrides: {groot_overrides}")
             self.policy = GrootPolicySteer.from_pretrained(pretrained_path, **groot_overrides)
+            log.info(
+                f"GR00T action decode: embodiment_tag={self.policy.config.embodiment_tag}, "
+                f"action_decode_transform={self.policy.config.action_decode_transform!r}"
+            )
         else:
             raise ValueError(f"Unknown policy type: {policy_type} (main_gr00t.py serves 'groot'; use main.py for pi05)")
         
@@ -593,7 +657,7 @@ class Main:
         # Output directory (use Hydra's output directory directly)
         # self.output_dir = self.config.get('output_dir', 'results/')
         # if not env_config.get("start_id", None):
-        self.output_dir = f"outputs/{env_config.get("suite_name")}/"
+        self.output_dir = f"outputs_gr00t/{env_config.get("suite_name")}/"
         # else:
         #     self.output_dir = f"outputs/{env_config.get("suite_name")}/"
         # Ensure it ends with /

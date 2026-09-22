@@ -115,3 +115,6 @@ if __name__ == "__main__":
 
     print("Error tasks: ", error_task)
     print("Total error tasks: ", len(error_task))
+    print(f"Mid task id: {error_task[len(error_task) // 2] if error_task else 'N/A'}")
+    print(f"Next half start id: {error_task[(len(error_task) // 2)+1] if error_task else 'N/A'}")
+

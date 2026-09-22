@@ -417,7 +417,7 @@ def launch_shards(cfg: DictConfig, gpus: List[int], num_workers: int) -> int:
 
     # Aggregate whatever the workers did finish, so one crashed shard does not
     # throw away the results of the others.
-    aggregate_shards(parent_dir, shard_dirs, cfg.backend.backend)
+    # aggregate_shards(parent_dir, shard_dirs, cfg.backend.backend)
     return max(return_codes) if any(return_codes) else 0
 
 
@@ -1276,7 +1276,7 @@ def main(cfg: DictConfig) -> None:
         # Multi-GPU: worker processes over the given GPUs, disjoint tasks/episodes each
         python main.py backend=libero_plus main.gpus=all
         python main.py backend=libero_plus main.gpus=[0,1,2,3] \
-                       backend.libero_plus.suite_name=libero_object backend.libero_plus.start_id=0 backend.libero_plus.end_id=499
+                       backend.libero_plus.suite_name=libero_object backend.libero_plus.start_id=2301 backend.libero_plus.end_id=2500
         python main.py main.gpus=[0,2,3] backend.libero_plus.suite_name=libero_spatial main.num_workers=8 main.rerun_error_dir=outputs/libero_spatial
         # More workers than GPUs: 8 concurrent VLM clients spread over 3 GPUs
         python main.py backend=libero_plus main.gpus=[0,1,2] main.num_workers=8

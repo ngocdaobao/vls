@@ -8,7 +8,14 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
 
     df = pd.read_csv(args.result_dir)
+    import pandas as pd
 
+
+    # Keep the first occurrence of each ID
+    df = df.drop_duplicates(subset="Task ID", keep="first")
+
+    df.to_csv("output.csv", index=False)
+    
     category = df['Category'].unique()
     print(category)
     success_rate = {}

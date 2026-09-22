@@ -110,4 +110,6 @@ outputs
 =0.30.0
 =0.30.0,
 
-checkpoints/
+outputs_gr00t/
+result/
+result_gr00t/

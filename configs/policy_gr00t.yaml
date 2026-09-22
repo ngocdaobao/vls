@@ -27,11 +27,20 @@ groot:
   # The base model below is NOT finetuned on LIBERO. It loads and runs, but for
   # real numbers point this at a LIBERO-finetuned N1.7 checkpoint and set
   # `embodiment_tag: libero_sim` below.
-  pretrained_path: nvidia/GR00T-N1.7-3B
+  # Local directory: a full copy of the Hub mirror baongocdao/GR00T-N1.7-libero-spatial,
+  # which now ships its own config.json (identical to the one from the checkpoint it
+  # was finetuned from, nvidia/GR00T-N1.7-LIBERO). Repopulate with:
+  #   HF_HUB_DISABLE_SYMLINKS=1 python -c "from huggingface_hub import snapshot_download; \
+  #     snapshot_download('baongocdao/GR00T-N1.7-libero-spatial', \
+  #     local_dir='checkpoints/GR00T-N1.7-libero-spatial')"
+  # Keep it as real files, not symlinks into ~/.cache/huggingface -- clearing that
+  # cache leaves the directory present but every shard a dangling link, which
+  # surfaces as "no safetensors file in checkpoints/GR00T-N1.7-libero-spatial".
+  pretrained_path: checkpoints/libero_spatial
 
   # Denoising steps for the flow-matching action head. Leave at the checkpoint's
   # own value by removing this key; 10 keeps parity with the PI0.5 setup.
-  num_inference_steps: 10
+  num_inference_steps: 4
 
   # How many steps of the predicted chunk are guided and executed. Clamped to
   # the action head's own horizon (40 for N1.7; the checkpoint's own execution
@@ -52,4 +61,7 @@ groot:
   #   python main_gr00t.py policy.groot.config_overrides.embodiment_tag=libero_sim
   #   python main_gr00t.py +policy.groot.config_overrides.use_flash_attention=true
   config_overrides:
-    embodiment_tag: null
+    # Must name an embodiment the checkpoint's statistics.json carries: GrootConfig
+    # otherwise defaults to 'new_embodiment', for which there are no statistics, so
+    # actions cannot be normalized or decoded.
+    embodiment_tag: libero_sim
