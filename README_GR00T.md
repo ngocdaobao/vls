@@ -40,7 +40,8 @@ uv pip install dm-tree diffusers
 ```bash
 mkdir third_party
 cd third_party
-git clone https://github.com/sylvestf/LIBERO-plus.git
+git clone https://github.com/sylvestf/LIBERO-plus.git libero_plus
+cd libero_plus
 uv pip install -e .
 bash scripts/setup_libero_plus.sh
 
