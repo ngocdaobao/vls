@@ -43,7 +43,6 @@ cd third_party
 git clone https://github.com/sylvestf/LIBERO-plus.git libero_plus
 cd libero_plus
 uv pip install -e .
-cd ../..
 bash scripts/setup_libero_plus.sh
 
 ```
@@ -59,15 +58,15 @@ python main_gr00t.py
 
 ```bash
 # Another suite, one perturbation dimension, set perturbation_categories=null for running all perturbs
-uv run python main_gr00t.py backend.libero_plus.suite_name=libero_object \
+uv run --no-sync --no-sync python main_gr00t.py backend.libero_plus.suite_name=libero_object \
     backend.libero_plus.perturbation_categories=[camera]
 
 # Multi-GPU: workers over disjoint task strides, merged at the end
-uv run python main_gr00t.py main.gpus=[0,1,2] main.num_workers=6
+uv run --no-sync --no-sync python main_gr00t.py main.gpus=[0,1,2] main.num_workers=6
 
 
 # Steering off, as a baseline
-uv run python main_gr00t.py main.use_guidance=false
+uv run --no-sync python main_gr00t.py main.use_guidance=false
 ```
 
 The multi-GPU launcher re-invokes `main_gr00t.py` (not `main.py`) for each shard,
@@ -75,7 +74,7 @@ so workers inherit the GR00T config automatically.
 
 
 ```bash
-uv run python main_gr00t.py main.result_dir=result_gr00t \
+uv run --no-sync python main_gr00t.py main.result_dir=result_gr00t \
 ```
 
 `main.result_dir` moves the CSV. The per-task rollout directory is built from
