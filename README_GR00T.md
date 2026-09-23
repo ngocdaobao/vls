@@ -58,11 +58,11 @@ python main_gr00t.py
 
 ```bash
 # Another suite, one perturbation dimension, set perturbation_categories=null for running all perturbs
-uv run --no-sync --no-sync python main_gr00t.py backend.libero_plus.suite_name=libero_object \
+uv run  --no-sync python main_gr00t.py backend.libero_plus.suite_name=libero_object \
     backend.libero_plus.perturbation_categories=[camera]
 
 # Multi-GPU: workers over disjoint task strides, merged at the end
-uv run --no-sync --no-sync python main_gr00t.py main.gpus=[0,1,2] main.num_workers=6
+uv run  --no-sync python main_gr00t.py main.gpus=[0,1,2] main.num_workers=6
 
 
 # Steering off, as a baseline
